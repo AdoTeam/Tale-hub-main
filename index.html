@@ -13,38 +13,44 @@
     font-family:Arial, sans-serif;
 }
 
-html{
-    scroll-behavior:smooth;
-}
-
-/* BACKGROUND (NO DARK FILTER) */
 body{
     background:url("pexels-codioful-7130542.jpg") center/cover no-repeat fixed;
     color:white;
 }
 
-/* NAV ALWAYS TOP */
-nav{
+body::before{
+    content:"";
     position:fixed;
-    top:0;
-    left:0;
-    width:100%;
-    z-index:9999;
+    inset:0;
+    background:rgba(0,0,0,0.5);
+    z-index:-1;
+}
+
+/* NAV */
+nav{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    padding:18px 50px;
-    background:rgba(0,0,0,0.4);
+    padding:20px 50px;
+    position:sticky;
+    top:0;
+    background:rgba(0,0,0,0.5);
     backdrop-filter:blur(10px);
+}
+
+.logo{
+    font-weight:bold;
+    font-size:20px;
 }
 
 nav ul{
     display:flex;
     gap:20px;
     list-style:none;
+    align-items:center;
 }
 
-nav a{
+nav ul li a{
     color:white;
     text-decoration:none;
 }
@@ -81,18 +87,75 @@ nav a{
     100%{background-position:400%}
 }
 
-/* PRODUCTS */
+.subtitle{
+    margin-top:10px;
+    color:#ccc;
+}
+
+/* BUTTONS */
+.btn{
+    padding:12px 22px;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.btn:hover{transform:scale(1.05);}
+
+.discord{
+    background:#5865F2;
+    color:white;
+}
+
+.youtube{
+    background:#ff0000;
+    color:white;
+}
+
+/* SECTION */
 .section{
-    padding:100px 50px;
+    padding:80px 50px;
 }
 
 .panel{
-    background:rgba(255,255,255,0.08);
+    background:rgba(10,18,40,0.6);
+    backdrop-filter:blur(12px);
     border-radius:18px;
     padding:40px;
-    backdrop-filter:blur(10px);
 }
 
+/* TALE+ SECTION */
+.talefree{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin:40px 0;
+    padding:30px;
+    background:rgba(255,255,255,0.06);
+    border-radius:16px;
+    border:1px solid rgba(255,255,255,0.1);
+}
+
+.tale-title{
+    font-size:32px;
+    font-weight:900;
+    background:linear-gradient(90deg,red,orange,yellow,green,cyan,blue,violet,red);
+    background-size:400%;
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    animation:rainbow 6s linear infinite;
+}
+
+.tale-btn{
+    padding:10px 18px;
+    background:#00aaff;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+}
+
+/* GRID */
 .grid{
     display:grid;
     grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
@@ -100,11 +163,11 @@ nav a{
 }
 
 .card{
-    background:rgba(255,255,255,0.08);
+    background:rgba(255,255,255,0.06);
     border-radius:14px;
     overflow:hidden;
-    cursor:pointer;
     transition:.3s;
+    cursor:pointer;
 }
 
 .card:hover{
@@ -121,93 +184,33 @@ nav a{
     padding:15px;
 }
 
-/* MODAL */
-.modal{
+.price{
+    color:#00ff9d;
+}
+
+/* POPUP */
+.popup{
     position:fixed;
     inset:0;
     display:none;
     justify-content:center;
     align-items:center;
-    background:rgba(0,0,0,0.25); /* çok hafif, karartma yok */
-    z-index:99999;
+    background:rgba(0,0,0,0.8);
 }
 
-.modal-box{
-    width:700px;
-    background:rgba(20,20,20,0.9);
-    border-radius:16px;
-    display:flex;
-    overflow:hidden;
-    position:relative;
-}
-
-/* LEFT */
-.modal-left{
-    flex:1;
-    padding:25px;
-}
-
-.modal-left h2{
-    margin-bottom:10px;
-}
-
-.modal-left p{
-    color:#ccc;
-    line-height:1.5;
-}
-
-/* RIGHT IMAGE */
-.modal-right{
-    width:280px;
-}
-
-.modal-right img{
-    width:100%;
-    height:100%;
-    object-fit:cover;
-}
-
-/* BUTTONS */
-.btn-row{
-    margin-top:20px;
-    display:flex;
-    gap:10px;
-}
-
-.buy-btn{
-    background:#00ff7b;
-    border:none;
-    padding:10px 15px;
-    border-radius:10px;
-    cursor:pointer;
-    font-weight:bold;
-}
-
-.dc-btn{
-    background:#5865F2;
-    border:none;
-    padding:10px 15px;
-    border-radius:10px;
-    cursor:pointer;
-    color:white;
-}
-
-/* CLOSE */
-.close{
-    position:absolute;
-    top:10px;
-    right:15px;
-    cursor:pointer;
-    font-size:22px;
+.popup-box{
+    background:#111827;
+    padding:20px;
+    border-radius:12px;
+    width:300px;
 }
 </style>
 </head>
 
 <body>
 
-<!-- NAV -->
 <nav>
-    <div>Tale HUB</div>
+    <div class="logo">Tale HUB</div>
 
     <ul>
         <li><a href="#products">Products</a></li>
@@ -219,32 +222,61 @@ nav a{
 <!-- HERO -->
 <section class="hero">
     <h1 class="title">TALE HUB</h1>
+    <p class="subtitle">Modern • Fast • Powerful</p>
+
+    <div style="margin-top:20px; display:flex; gap:10px;">
+        <button class="btn discord" onclick="window.open('https://discord.com')">Discord</button>
+        <button class="btn youtube" onclick="window.open('https://youtube.com')">YouTube</button>
+    </div>
+</section>
+
+<!-- TALE+ FREE -->
+<section class="section">
+<div class="panel">
+
+<div class="talefree">
+    <div>
+        <div class="tale-title">Get Free TALE+</div>
+        <p>Unlock premium features and boost your experience instantly.</p>
+    </div>
+
+    <button class="tale-btn" onclick="window.open('https://github.com','_blank')">
+        Get Key
+    </button>
+</div>
+
+</div>
 </section>
 
 <!-- PRODUCTS -->
 <section id="products" class="section">
 <div class="panel">
 
+<h2>Products</h2>
+
 <div class="grid">
 
-<div class="card" onclick="openModal('Product 1','This is a cool product description.','$19.99','https://picsum.photos/400?1')">
+<div class="card">
 <img src="https://picsum.photos/400?1">
 <div class="card-content">
 <h3>Product 1</h3>
+<div class="price">$19.99</div>
 </div>
 </div>
 
-<div class="card" onclick="openModal('Product 2','Another product description here.','$29.99','https://picsum.photos/400?2')">
+<div class="card">
 <img src="https://picsum.photos/400?2">
 <div class="card-content">
 <h3>Product 2</h3>
+<div class="price">$29.99</div>
 </div>
 </div>
 
-<div class="card" onclick="openModal('Product 3','Best product ever.','$39.99','https://picsum.photos/400?3')">
+<div class="card">
 <img src="https://picsum.photos/400?3">
 <div class="card-content">
 <h3>Product 3</h3>
+<div class="price">$39.99</div>
 </div>
 </div>
 
@@ -252,53 +284,15 @@ nav a{
 </div>
 </section>
 
-<!-- MODAL -->
-<div class="modal" id="modal">
+<!-- INFO -->
+<section class="section">
+<div class="panel">
 
-<div class="modal-box">
-
-<div class="close" onclick="closeModal()">×</div>
-
-<!-- LEFT -->
-<div class="modal-left">
-<h2 id="mTitle"></h2>
-<p id="mDesc"></p>
-<h3 id="mPrice" style="margin-top:10px;color:#00ff7b;"></h3>
-
-<div class="btn-row">
-<button class="buy-btn" onclick="window.open('https://github.com')">Buy</button>
-<button class="dc-btn" onclick="window.open('https://discord.com')">Discord</button>
-</div>
-</div>
-
-<!-- RIGHT -->
-<div class="modal-right">
-<img id="mImg">
-</div>
+<h2>Tale HUB Nedir?</h2>
+<p>Modern script platform designed for performance, speed and clean UI experience.</p>
 
 </div>
-
-</div>
-
-<script>
-function openModal(title, desc, price, img){
-    document.getElementById("modal").style.display="flex";
-    document.getElementById("mTitle").innerText=title;
-    document.getElementById("mDesc").innerText=desc;
-    document.getElementById("mPrice").innerText=price;
-    document.getElementById("mImg").src=img;
-}
-
-function closeModal(){
-    document.getElementById("modal").style.display="none";
-}
-
-window.onclick=function(e){
-    if(e.target.id==="modal"){
-        closeModal();
-    }
-}
-</script>
+</section>
 
 </body>
 </html>
