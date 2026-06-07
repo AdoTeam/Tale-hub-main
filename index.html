@@ -3,284 +3,847 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tale HUB</title>
+<title>MarketUI</title>
 
 <style>
+
 *{
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family:Arial;
+    font-family:Arial, sans-serif;
+}
+
+html{
+    scroll-behavior:smooth;
 }
 
 body{
-    background:url("pexels-codioful-7130542.jpg") center/cover no-repeat fixed;
-    color:white;
+    background:#f5f5f5;
+    color:#111;
+    transition:0.3s;
 }
 
-/* dark overlay */
-body::before{
-    content:"";
-    position:fixed;
-    width:100%;
-    height:100%;
-    background:rgba(0,0,0,0.6);
-    z-index:-1;
-}
+/* NAVBAR */
 
-/* NAV */
 nav{
-    position:fixed;
-    top:0;
-    width:100%;
     display:flex;
     justify-content:space-between;
     align-items:center;
-    padding:15px 40px;
-    background:rgba(0,0,0,0.6);
-    backdrop-filter:blur(10px);
+    padding:20px 60px;
+    background:white;
+    position:sticky;
+    top:0;
+    z-index:999;
+    box-shadow:0 2px 10px rgba(0,0,0,0.08);
 }
 
-.nav-links{
+.logo{
+    font-size:24px;
+    font-weight:bold;
+}
+
+nav ul{
     display:flex;
-    gap:20px;
+    gap:25px;
+    list-style:none;
+    align-items:center;
 }
 
-.nav-links a{
-    color:white;
+nav ul li a{
     text-decoration:none;
+    color:#444;
+    font-weight:600;
 }
 
-.taleplus{
-    padding:8px 15px;
-    background:#00aaff;
+.theme-box select{
+    padding:10px;
+    border:none;
     border-radius:8px;
+    background:#eee;
     cursor:pointer;
 }
 
 /* HERO */
+
 .hero{
-    height:100vh;
     display:flex;
-    flex-direction:column;
-    justify-content:center;
+    justify-content:space-between;
     align-items:center;
-    text-align:center;
+    padding:90px 60px;
+    background:white;
 }
 
-.title{
-    font-size:80px;
-    font-weight:900;
-    background:linear-gradient(90deg,red,orange,yellow,green,cyan,blue,violet,red);
-    background-size:400%;
-    -webkit-background-clip:text;
-    -webkit-text-fill-color:transparent;
-    animation:anim 6s linear infinite;
+.hero-text{
+    max-width:550px;
 }
 
-@keyframes anim{
-    0%{background-position:0%}
-    100%{background-position:400%}
-}
-
-.subtitle{
-    margin-top:10px;
-    color:#ccc;
-}
-
-/* BUTTONS */
-.btn{
-    margin-top:20px;
-    padding:12px 25px;
-    border:none;
-    border-radius:10px;
-    cursor:pointer;
-    transition:.3s;
-}
-
-.buy{background:#00bfff;color:white;}
-.youtube{background:red;color:white;margin-left:10px;}
-
-.btn:hover{transform:scale(1.05);}
-
-/* SECTIONS */
-.section{
-    background:linear-gradient(180deg,#050b1a,#000);
-    padding:80px 20px;
-    text-align:center;
-}
-
-.section h2{
+.hero-text h1{
+    font-size:52px;
     margin-bottom:20px;
 }
 
-/* PRODUCTS */
-.products{
-    display:flex;
-    justify-content:center;
-    gap:20px;
-    flex-wrap:wrap;
+.hero-text p{
+    color:#666;
+    line-height:1.7;
+    margin-bottom:25px;
 }
 
-.card{
-    width:250px;
-    background:#111827;
-    padding:15px;
-    border-radius:15px;
+.btn{
+    padding:12px 20px;
+    border:none;
+    border-radius:8px;
     cursor:pointer;
-    transition:.3s;
+    background:black;
+    color:white;
+    transition:0.3s;
+}
+
+.btn:hover{
+    opacity:0.85;
+}
+
+.hero-image{
+    width:420px;
+    height:280px;
+    border-radius:16px;
+    background:url('https://picsum.photos/900/500') center/cover;
+}
+
+/* SECTION */
+
+section{
+    padding:70px 60px;
+}
+
+.section-title{
+    font-size:32px;
+    margin-bottom:30px;
+}
+
+/* GRID */
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+    gap:25px;
+}
+
+/* CARD */
+
+.card{
+    background:white;
+    border-radius:14px;
+    overflow:hidden;
+    box-shadow:0 3px 12px rgba(0,0,0,0.08);
+    transition:0.3s;
 }
 
 .card:hover{
-    transform:translateY(-10px);
+    transform:translateY(-5px);
 }
 
 .card img{
     width:100%;
-    border-radius:10px;
+    height:220px;
+    object-fit:cover;
 }
 
-/* popup */
-.popup{
+.card-content{
+    padding:18px;
+}
+
+.card-content h3{
+    margin-bottom:10px;
+}
+
+.price{
+    color:green;
+    font-weight:bold;
+}
+
+.product-link{
+    text-decoration:none;
+    color:inherit;
+}
+
+/* INFO */
+
+.info-box{
+    background:white;
+    border-radius:16px;
+    padding:40px;
+    line-height:1.8;
+}
+
+/* FOOTER */
+
+footer{
+    margin-top:40px;
+    background:white;
+    text-align:center;
+    padding:35px;
+    color:#777;
+}
+
+/* MODAL */
+
+.modal{
     position:fixed;
     top:0;
     left:0;
     width:100%;
     height:100%;
-    background:rgba(0,0,0,0.8);
+    background:rgba(0,0,0,0.6);
     display:none;
     justify-content:center;
     align-items:center;
+    z-index:9999;
 }
 
-.popup-content{
-    background:#111827;
-    padding:20px;
-    border-radius:15px;
-    width:300px;
+.modal-content{
+    background:white;
+    width:90%;
+    max-width:700px;
+    border-radius:16px;
+    overflow:hidden;
 }
 
-/* discord btn */
-.discord{
-    display:inline-block;
+.modal-content img{
+    width:100%;
+    height:320px;
+    object-fit:cover;
+}
+
+.modal-body{
+    padding:25px;
+}
+
+.close{
+    float:right;
+    font-size:28px;
+    cursor:pointer;
+}
+
+.modal-price{
+    color:green;
+    font-size:22px;
     margin-top:10px;
-    padding:10px;
-    background:#5865F2;
-    color:white;
-    text-decoration:none;
-    border-radius:8px;
+    font-weight:bold;
 }
 
-/* sections colors */
-.darksec{
-    background:#050a1a;
+.button-group{
+    margin-top:20px;
+    display:flex;
+    gap:10px;
+}
+
+.copy-btn{
+    background:#00b894;
+}
+
+/* THEMES */
+
+body.white{
+    background:#f5f5f5;
+    color:#111;
+}
+
+body.turquoise{
+    background:#dffefe;
+    color:#033;
+}
+
+body.dark{
+    background:#111;
+    color:white;
+}
+
+body.dark nav,
+body.dark .hero,
+body.dark .card,
+body.dark .info-box,
+body.dark footer,
+body.dark .modal-content{
+    background:#1e1e1e;
+    color:white;
+}
+
+body.dark nav ul li a{
+    color:white;
+}
+
+body.gray{
+    background:#2a2a2a;
+    color:white;
+}
+
+body.gray nav,
+body.gray .hero,
+body.gray .card,
+body.gray .info-box,
+body.gray footer,
+body.gray .modal-content{
+    background:#3a3a3a;
+    color:white;
+}
+
+body.gray nav ul li a{
+    color:white;
 }
 
 </style>
 </head>
 
-<body>
+<body class="white">
+
+<!-- NAVBAR -->
 
 <nav>
-    <div>Tale HUB</div>
 
-    <div class="nav-links">
-        <a href="#products">Products</a>
-        <a href="#info">Info</a>
-        <a href="#features">Features</a>
-    </div>
+<div class="logo">MarketUI</div>
 
-    <div class="taleplus">Tale+</div>
+<ul>
+
+<li><a href="#">Home</a></li>
+
+<li><a href="#featured">Products</a></li>
+
+<li><a href="#all-products">All Products</a></li>
+
+<li><a href="#info">Info</a></li>
+
+<li>
+
+<div class="theme-box">
+
+<select onchange="changeTheme(this.value)">
+
+<option value="white">White</option>
+
+<option value="turquoise">Turquoise</option>
+
+<option value="dark">Black</option>
+
+<option value="gray">Black Gray</option>
+
+</select>
+
+</div>
+
+</li>
+
+</ul>
+
 </nav>
 
 <!-- HERO -->
-<section class="hero">
-    <h1 class="title">TALE HUB</h1>
-    <p class="subtitle">Modern • Fast • Powerful</p>
 
-    <button class="btn buy">Get Key</button>
-    <button class="btn youtube" onclick="window.open('https://youtube.com')">YouTube</button>
+<section class="hero">
+
+<div class="hero-text">
+
+<h1>Modern Market Experience</h1>
+
+<p>
+Discover premium products with stylish shopping experience.
+Fast delivery, secure payment and modern UI.
+</p>
+
+<button class="btn">Shop Now</button>
+
+</div>
+
+<div class="hero-image"></div>
+
 </section>
 
-<!-- PRODUCTS -->
-<section class="section" id="products">
-    <h2>Products</h2>
+<!-- FEATURED -->
 
-    <div class="products">
+<section id="featured">
 
-        <div class="card" onclick="openPopup('Product 1','Example description here')">
-            <img src="https://via.placeholder.com/250x150">
-            <p>Product 1</p>
-        </div>
+<div class="section-title">Featured Products</div>
 
-        <div class="card" onclick="openPopup('Product 2','Example description here')">
-            <img src="https://via.placeholder.com/250x150">
-            <p>Product 2</p>
-        </div>
+<div class="grid">
 
-        <div class="card" onclick="openPopup('Product 3','Example description here')">
-            <img src="https://via.placeholder.com/250x150">
-            <p>Product 3</p>
-        </div>
+<a class="product-link" href="#"
+onclick="openProduct(
+'123',
+'$19.99',
+'Modern random product.',
+'https://picsum.photos/500?1',
+'CODE123',
+'https://google.com'
+)">
 
-    </div>
+<div class="card">
+
+<img src="https://picsum.photos/500?1">
+
+<div class="card-content">
+
+<h3>123</h3>
+
+<div class="price">$19.99</div>
+
+</div>
+
+</div>
+
+</a>
+
+<a class="product-link" href="#"
+onclick="openProduct(
+'456',
+'$29.99',
+'Modern random product.',
+'https://picsum.photos/500?2',
+'SALE456',
+'https://youtube.com'
+)">
+
+<div class="card">
+
+<img src="https://picsum.photos/500?2">
+
+<div class="card-content">
+
+<h3>456</h3>
+
+<div class="price">$29.99</div>
+
+</div>
+
+</div>
+
+</a>
+
+<a class="product-link" href="#"
+onclick="openProduct(
+'789',
+'$39.99',
+'Modern random product.',
+'https://picsum.photos/500?3',
+'FREE789',
+'https://github.com'
+)">
+
+<div class="card">
+
+<img src="https://picsum.photos/500?3">
+
+<div class="card-content">
+
+<h3>789</h3>
+
+<div class="price">$39.99</div>
+
+</div>
+
+</div>
+
+</a>
+
+</div>
+
+</section>
+
+<!-- ALL PRODUCTS -->
+
+<section id="all-products">
+
+<div class="section-title">All Products</div>
+
+<div class="grid">
+
+<a class="product-link" href="#"
+onclick="openProduct(
+'111',
+'$12.99',
+'Modern random product.',
+'https://picsum.photos/500?11',
+'CODE111',
+'https://google.com'
+)">
+
+<div class="card">
+<img src="https://picsum.photos/500?11">
+
+<div class="card-content">
+<h3>111</h3>
+<div class="price">$12.99</div>
+</div>
+
+</div>
+
+</a>
+
+<a class="product-link" href="#"
+onclick="openProduct(
+'222',
+'$22.99',
+'Modern random product.',
+'https://picsum.photos/500?12',
+'SALE222',
+'https://youtube.com'
+)">
+
+<div class="card">
+<img src="https://picsum.photos/500?12">
+
+<div class="card-content">
+<h3>222</h3>
+<div class="price">$22.99</div>
+</div>
+
+</div>
+
+</a>
+
+<a class="product-link" href="#"
+onclick="openProduct(
+'333',
+'$33.99',
+'Modern random product.',
+'https://picsum.photos/500?13',
+'DISCOUNT333',
+'https://github.com'
+)">
+
+<div class="card">
+<img src="https://picsum.photos/500?13">
+
+<div class="card-content">
+<h3>333</h3>
+<div class="price">$33.99</div>
+</div>
+
+</div>
+
+</a>
+
+<a class="product-link" href="#"
+onclick="openProduct(
+'444',
+'$44.99',
+'Modern random product.',
+'https://picsum.photos/500?14',
+'FREE444',
+'https://openai.com'
+)">
+
+<div class="card">
+<img src="https://picsum.photos/500?14">
+
+<div class="card-content">
+<h3>444</h3>
+<div class="price">$44.99</div>
+</div>
+
+</div>
+
+</a>
+
+<a class="product-link" href="#"
+onclick="openProduct(
+'555',
+'$55.99',
+'Modern random product.',
+'https://picsum.photos/500?15',
+'VIP555',
+'https://facebook.com'
+)">
+
+<div class="card">
+<img src="https://picsum.photos/500?15">
+
+<div class="card-content">
+<h3>555</h3>
+<div class="price">$55.99</div>
+</div>
+
+</div>
+
+</a>
+
+<a class="product-link" href="#"
+onclick="openProduct(
+'666',
+'$66.99',
+'Modern random product.',
+'https://picsum.photos/500?16',
+'SHOP666',
+'https://twitter.com'
+)">
+
+<div class="card">
+<img src="https://picsum.photos/500?16">
+
+<div class="card-content">
+<h3>666</h3>
+<div class="price">$66.99</div>
+</div>
+
+</div>
+
+</a>
+
+<a class="product-link" href="#"
+onclick="openProduct(
+'777',
+'$77.99',
+'Modern random product.',
+'https://picsum.photos/500?17',
+'HELLO777',
+'https://amazon.com'
+)">
+
+<div class="card">
+<img src="https://picsum.photos/500?17">
+
+<div class="card-content">
+<h3>777</h3>
+<div class="price">$77.99</div>
+</div>
+
+</div>
+
+</a>
+
+<a class="product-link" href="#"
+onclick="openProduct(
+'888',
+'$88.99',
+'Modern random product.',
+'https://picsum.photos/500?18',
+'MEGA888',
+'https://netflix.com'
+)">
+
+<div class="card">
+<img src="https://picsum.photos/500?18">
+
+<div class="card-content">
+<h3>888</h3>
+<div class="price">$88.99</div>
+</div>
+
+</div>
+
+</a>
+
+</div>
+
 </section>
 
 <!-- INFO -->
-<section class="section darksec" id="info">
-    <h2>What is Tale HUB?</h2>
-    <p>
-        Tale HUB is a modern script platform designed to provide fast, stable and clean user experience.
-        It is built for performance and simplicity.
-    </p>
+
+<section id="info">
+
+<div class="info-box">
+
+<h2>About MarketUI</h2>
+
+<br>
+
+<p>
+Modern shopping platform with stylish interface and fast experience.
+</p>
+
+<br>
+
+<p>
+✔ Fast Shopping <br>
+✔ Secure Payment <br>
+✔ Premium Products <br>
+✔ Modern UI Design
+</p>
+
+<br><br>
+
+<h3>Kod Açıklamaları</h3>
+
+<br>
+
+<p>
+
+<b>Navbar:</b> Üst menü alanıdır. Menüleri değiştirmek için
+<code>&lt;nav&gt;</code> bölümünü düzenle.
+
+<br><br>
+
+<b>Hero:</b> Ana giriş alanıdır.
+<code>.hero</code> kısmından değişir.
+
+<br><br>
+
+<b>Grid:</b> Ürünlerin dizildiği sistemdir.
+<code>.grid</code> CSS kısmından ayarlanır.
+
+<br><br>
+
+<b>Card:</b> Ürün kutularıdır.
+<code>.card</code> alanından renk, shadow, hover değişir.
+
+<br><br>
+
+<b>Tema Sistemi:</b>
+<code>body.dark</code>,
+<code>body.gray</code>,
+<code>body.white</code>,
+<code>body.turquoise</code>
+
+alanlarından düzenlenir.
+
+<br><br>
+
+<b>Ürün Ekleme:</b>
+
+Her ürün şu sistemle eklenir:
+
+</p>
+
+<pre>
+openProduct(
+'Ürün Adı',
+'Fiyat',
+'Açıklama',
+'Resim',
+'Kopya Kod',
+'Yönlenecek Site'
+)
+</pre>
+
+<p>
+
+<b>Kopyalama Sistemi:</b>
+
+Copy butonu ürünün kendi kodunu kopyalar.
+
+<br><br>
+
+<b>Buy Now:</b>
+
+Her ürün kendi sitesine yeni sekmede gider.
+
+</p>
+
+</div>
+
 </section>
 
-<!-- FEATURES -->
-<section class="section" id="features">
-    <h2>Tale HUB Features</h2>
-    <ul>
-        <li>Fast Execution</li>
-        <li>Clean UI</li>
-        <li>Regular Updates</li>
-    </ul>
-</section>
+<!-- FOOTER -->
 
-<!-- BY ADO -->
-<section class="section darksec">
-    <h2>By ADO</h2>
-    <p>
-        This project is developed with focus on design, performance and simplicity.
-    </p>
-</section>
+<footer>
+© 2026 MarketUI • All Rights Reserved
+</footer>
 
-<!-- THANK YOU -->
-<section class="section">
-    <h2>Thank You</h2>
-    <p>Thanks for using Tale HUB.</p>
-</section>
+<!-- MODAL -->
 
-<!-- POPUP -->
-<div class="popup" id="popup">
-    <div class="popup-content">
-        <h2 id="pTitle"></h2>
-        <p id="pDesc"></p>
+<div class="modal" id="productModal">
 
-        <a class="discord" href="https://google.com" target="_blank">Discord</a>
-    </div>
+<div class="modal-content">
+
+<div class="modal-body">
+
+<span class="close" onclick="closeModal()">&times;</span>
+
+<img id="modalImg">
+
+<h2 id="modalTitle" style="margin-top:20px;"></h2>
+
+<p id="modalDesc" style="margin-top:10px;color:gray;"></p>
+
+<div class="modal-price" id="modalPrice"></div>
+
+<div class="button-group">
+
+<button class="btn" onclick="buyNow()">
+Buy Now
+</button>
+
+<button class="btn copy-btn" onclick="copyCode()">
+Copy
+</button>
+
+</div>
+
+</div>
+
+</div>
+
 </div>
 
 <script>
-function openPopup(title, desc){
-    document.getElementById("popup").style.display="flex";
-    document.getElementById("pTitle").innerText=title;
-    document.getElementById("pDesc").innerText=desc;
+
+let currentCopy = "";
+let currentLink = "";
+
+function changeTheme(theme){
+
+    document.body.className = "";
+
+    document.body.classList.add(theme);
+
 }
 
-document.getElementById("popup").onclick=function(e){
-    if(e.target.id==="popup"){
-        this.style.display="none";
-    }
+function openProduct(
+    title,
+    price,
+    desc,
+    img,
+    copyText,
+    redirectLink
+){
+
+    document.getElementById("productModal").style.display = "flex";
+
+    document.getElementById("modalTitle").innerText = title;
+
+    document.getElementById("modalPrice").innerText = price;
+
+    document.getElementById("modalDesc").innerText = desc;
+
+    document.getElementById("modalImg").src = img;
+
+    currentCopy = copyText;
+
+    currentLink = redirectLink;
+
 }
+
+function closeModal(){
+
+    document.getElementById("productModal").style.display = "none";
+
+}
+
+function copyCode(){
+
+    navigator.clipboard.writeText(currentCopy);
+
+    alert(currentCopy + " copied!");
+
+}
+
+function buyNow(){
+
+    window.open(currentLink, "_blank");
+
+}
+
+window.onclick = function(e){
+
+    let modal = document.getElementById("productModal");
+
+    if(e.target == modal){
+
+        modal.style.display = "none";
+
+    }
+
+}
+
 </script>
 
 </body>
