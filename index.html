@@ -10,54 +10,52 @@
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family:Arial, sans-serif;
+    font-family:Arial;
 }
 
 body{
-    margin:0;
-    padding:0;
-    font-family:Arial, sans-serif;
+    background:url("pexels-codioful-7130542.jpg") center/cover no-repeat fixed;
     color:white;
-
-    background-image:url("pexels-codioful-7130542.jpg");
-    background-size:cover;
-    background-position:center;
-    background-repeat:no-repeat;
-    background-attachment:fixed;
 }
 
-/* ÜST MENÜ */
+/* dark overlay */
+body::before{
+    content:"";
+    position:fixed;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.6);
+    z-index:-1;
+}
+
+/* NAV */
 nav{
     position:fixed;
     top:0;
     width:100%;
-    background:rgba(0,0,0,0.8);
-    backdrop-filter:blur(10px);
     display:flex;
     justify-content:space-between;
     align-items:center;
-    padding:15px 50px;
-    z-index:1000;
-}
-
-.logo{
-    font-size:24px;
-    font-weight:bold;
+    padding:15px 40px;
+    background:rgba(0,0,0,0.6);
+    backdrop-filter:blur(10px);
 }
 
 .nav-links{
     display:flex;
-    gap:25px;
+    gap:20px;
 }
 
 .nav-links a{
     color:white;
     text-decoration:none;
-    transition:0.3s;
 }
 
-.nav-links a:hover{
-    color:#00ffff;
+.taleplus{
+    padding:8px 15px;
+    background:#00aaff;
+    border-radius:8px;
+    cursor:pointer;
 }
 
 /* HERO */
@@ -70,100 +68,220 @@ nav{
     text-align:center;
 }
 
-/* RENK AKIŞLI YAZI */
 .title{
-    font-size:90px;
+    font-size:80px;
     font-weight:900;
-    background:linear-gradient(
-        90deg,
-        red,
-        orange,
-        yellow,
-        lime,
-        cyan,
-        blue,
-        violet,
-        red
-    );
+    background:linear-gradient(90deg,red,orange,yellow,green,cyan,blue,violet,red);
     background-size:400%;
     -webkit-background-clip:text;
     -webkit-text-fill-color:transparent;
-
-    animation:rainbow 6s linear infinite;
-
-    filter:drop-shadow(0 0 15px rgba(255,255,255,.5));
+    animation:anim 6s linear infinite;
 }
 
-@keyframes rainbow{
-    0%{background-position:0%;}
-    100%{background-position:400%;}
+@keyframes anim{
+    0%{background-position:0%}
+    100%{background-position:400%}
 }
 
 .subtitle{
-    margin-top:15px;
-    color:#bdbdbd;
-    font-size:22px;
+    margin-top:10px;
+    color:#ccc;
 }
 
-.buttons{
-    margin-top:35px;
-    display:flex;
-    gap:20px;
-}
-
+/* BUTTONS */
 .btn{
-    padding:15px 35px;
+    margin-top:20px;
+    padding:12px 25px;
     border:none;
-    border-radius:12px;
-    font-size:18px;
+    border-radius:10px;
     cursor:pointer;
     transition:.3s;
 }
 
-.buy{
-    background:linear-gradient(45deg,#00ffff,#0099ff);
-    color:white;
+.buy{background:#00bfff;color:white;}
+.youtube{background:red;color:white;margin-left:10px;}
+
+.btn:hover{transform:scale(1.05);}
+
+/* SECTIONS */
+.section{
+    background:linear-gradient(180deg,#050b1a,#000);
+    padding:80px 20px;
+    text-align:center;
 }
 
-.info{
-    background:#1a1a1a;
-    color:white;
-    border:1px solid #333;
+.section h2{
+    margin-bottom:20px;
 }
 
-.btn:hover{
-    transform:translateY(-4px);
+/* PRODUCTS */
+.products{
+    display:flex;
+    justify-content:center;
+    gap:20px;
+    flex-wrap:wrap;
 }
+
+.card{
+    width:250px;
+    background:#111827;
+    padding:15px;
+    border-radius:15px;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.card:hover{
+    transform:translateY(-10px);
+}
+
+.card img{
+    width:100%;
+    border-radius:10px;
+}
+
+/* popup */
+.popup{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.8);
+    display:none;
+    justify-content:center;
+    align-items:center;
+}
+
+.popup-content{
+    background:#111827;
+    padding:20px;
+    border-radius:15px;
+    width:300px;
+}
+
+/* discord btn */
+.discord{
+    display:inline-block;
+    margin-top:10px;
+    padding:10px;
+    background:#5865F2;
+    color:white;
+    text-decoration:none;
+    border-radius:8px;
+}
+
+/* sections colors */
+.darksec{
+    background:#050a1a;
+}
+
 </style>
 </head>
 
 <body>
 
 <nav>
-    <div class="logo">Tale HUB</div>
+    <div>Tale HUB</div>
 
     <div class="nav-links">
-        <a href="#">Home</a>
-        <a href="#">Features</a>
-        <a href="#">Info</a>
-        <a href="#">Contact</a>
+        <a href="#products">Products</a>
+        <a href="#info">Info</a>
+        <a href="#features">Features</a>
     </div>
+
+    <div class="taleplus">Tale+</div>
 </nav>
 
+<!-- HERO -->
 <section class="hero">
-
     <h1 class="title">TALE HUB</h1>
+    <p class="subtitle">Modern • Fast • Powerful</p>
 
-    <p class="subtitle">
-        Powerful • Modern • Fast
-    </p>
-
-    <div class="buttons">
-        <button class="btn buy">Buy</button>
-        <button class="btn info">Info</button>
-    </div>
-
+    <button class="btn buy">Get Key</button>
+    <button class="btn youtube" onclick="window.open('https://youtube.com')">YouTube</button>
 </section>
+
+<!-- PRODUCTS -->
+<section class="section" id="products">
+    <h2>Products</h2>
+
+    <div class="products">
+
+        <div class="card" onclick="openPopup('Product 1','Example description here')">
+            <img src="https://via.placeholder.com/250x150">
+            <p>Product 1</p>
+        </div>
+
+        <div class="card" onclick="openPopup('Product 2','Example description here')">
+            <img src="https://via.placeholder.com/250x150">
+            <p>Product 2</p>
+        </div>
+
+        <div class="card" onclick="openPopup('Product 3','Example description here')">
+            <img src="https://via.placeholder.com/250x150">
+            <p>Product 3</p>
+        </div>
+
+    </div>
+</section>
+
+<!-- INFO -->
+<section class="section darksec" id="info">
+    <h2>What is Tale HUB?</h2>
+    <p>
+        Tale HUB is a modern script platform designed to provide fast, stable and clean user experience.
+        It is built for performance and simplicity.
+    </p>
+</section>
+
+<!-- FEATURES -->
+<section class="section" id="features">
+    <h2>Tale HUB Features</h2>
+    <ul>
+        <li>Fast Execution</li>
+        <li>Clean UI</li>
+        <li>Regular Updates</li>
+    </ul>
+</section>
+
+<!-- BY ADO -->
+<section class="section darksec">
+    <h2>By ADO</h2>
+    <p>
+        This project is developed with focus on design, performance and simplicity.
+    </p>
+</section>
+
+<!-- THANK YOU -->
+<section class="section">
+    <h2>Thank You</h2>
+    <p>Thanks for using Tale HUB.</p>
+</section>
+
+<!-- POPUP -->
+<div class="popup" id="popup">
+    <div class="popup-content">
+        <h2 id="pTitle"></h2>
+        <p id="pDesc"></p>
+
+        <a class="discord" href="https://google.com" target="_blank">Discord</a>
+    </div>
+</div>
+
+<script>
+function openPopup(title, desc){
+    document.getElementById("popup").style.display="flex";
+    document.getElementById("pTitle").innerText=title;
+    document.getElementById("pDesc").innerText=desc;
+}
+
+document.getElementById("popup").onclick=function(e){
+    if(e.target.id==="popup"){
+        this.style.display="none";
+    }
+}
+</script>
 
 </body>
 </html>
