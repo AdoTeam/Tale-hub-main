@@ -233,7 +233,11 @@ html{
     border-radius:25px;
     overflow:hidden;
     position:relative;
-    background:url("thanksfor.jpg") center/cover no-repeat;
+
+    background-image:url("thanksfor.jpg");
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
 }
 
 .thanks-overlay{
@@ -272,15 +276,16 @@ html{
 
 .scroll-text{
     position:absolute;
-    bottom:-100%;
+    left:0;
     width:100%;
     text-align:center;
     color:white;
     font-size:22px;
     font-weight:bold;
     line-height:50px;
-    animation:scrollUp 20s linear infinite;
     z-index:2;
+
+    animation:scrollUp 15s linear infinite;
 }
 
 @keyframes scrollUp{
@@ -387,7 +392,7 @@ html{
 </section>
 
 <!-- THANKS -->
-<section class="thanks">
+<section class="thanks-section">
 
     <div class="thanks-overlay"></div>
 
