@@ -224,6 +224,75 @@ html{
     transform: translateY(-100%);
 }
     
+
+/* THANKS SECTION */
+
+.thanks-section{
+    margin:80px 50px;
+    height:500px;
+    border-radius:25px;
+    overflow:hidden;
+    position:relative;
+    background:url("thanksfor.jpg") center/cover no-repeat;
+}
+
+.thanks-overlay{
+    position:absolute;
+    inset:0;
+    background:rgba(0,0,0,0.45);
+}
+
+.thanks-title{
+    position:absolute;
+    top:30px;
+    width:100%;
+    text-align:center;
+    font-size:60px;
+    font-weight:900;
+
+    background:linear-gradient(
+        90deg,
+        red,
+        orange,
+        yellow,
+        lime,
+        cyan,
+        blue,
+        violet,
+        red
+    );
+
+    background-size:400%;
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+
+    animation:rainbow 6s linear infinite;
+    z-index:2;
+}
+
+.scroll-text{
+    position:absolute;
+    bottom:-100%;
+    width:100%;
+    text-align:center;
+    color:white;
+    font-size:22px;
+    font-weight:bold;
+    line-height:50px;
+    animation:scrollUp 20s linear infinite;
+    z-index:2;
+}
+
+@keyframes scrollUp{
+    from{
+        transform:translateY(100%);
+    }
+    to{
+        transform:translateY(-120%);
+    }
+}
+
+
 </style>
 </head>
 
@@ -316,6 +385,29 @@ html{
 
 </div>
 </section>
+
+<!-- THANKS -->
+<section class="thanks">
+
+    <div class="thanks-overlay"></div>
+
+    <h1 class="thanks-title">
+        Thanks For
+    </h1>
+
+    <div class="scroll-text">
+        <p>Thanks For Using Tale HUB ❤️</p>
+        <p>Thanks To Our Community 💙</p>
+        <p>Thanks To Every Supporter 💚</p>
+        <p>Thanks To Mobile Players 📱</p>
+        <p>Thanks To PC Players 🖥️</p>
+        <p>Thanks For Your Trust ⭐</p>
+        <p>Thanks For Using Tale+ 🚀</p>
+        <p>Thanks For Being Here ✨</p>
+    </div>
+
+</section>
+
 
 </body>
 </html>
