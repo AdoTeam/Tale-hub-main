@@ -342,6 +342,80 @@ html{
     font-size:12px;
 }
 
+    .activity-widget{
+    position:fixed;
+    bottom:20px;
+    right:20px;
+
+    display:flex;
+    align-items:flex-end;
+
+    z-index:9999;
+}
+
+/* açılan kutu */
+.completed-actions{
+    width:260px;
+    height:300px;
+
+    background:rgba(15,23,42,.95);
+    border-radius:18px;
+
+    padding:15px;
+
+    border:1px solid rgba(255,255,255,.1);
+
+    overflow:hidden;
+
+    transition:0.3s;
+}
+
+.completed-actions h3{
+    text-align:center;
+    margin-bottom:10px;
+}
+
+.activity-list{
+    height:230px;
+    overflow-y:auto;
+}
+
+.activity-item{
+    background:rgba(255,255,255,.05);
+    padding:10px;
+    margin-bottom:8px;
+    border-radius:10px;
+}
+
+.activity-item p{
+    font-size:12px;
+    color:#ccc;
+}
+
+/* sağdaki küçük buton */
+.widget-toggle{
+    width:40px;
+    height:40px;
+
+    background:#00aaff;
+    color:white;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    border-radius:10px;
+
+    margin-left:10px;
+
+    cursor:pointer;
+}
+
+/* gizleme animasyonu */
+.activity-widget.hide .completed-actions{
+    transform:translateX(120%);
+    opacity:0;
+}
 
 </style>
 </head>
@@ -379,6 +453,12 @@ setInterval(() => {
 }, 5000);
 </script>
 
+    <script>
+function toggleWidget(){
+    document.getElementById("widget").classList.toggle("hide");
+}
+</script>
+    
 <body>
 
     <div class="topbar">
