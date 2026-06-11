@@ -452,7 +452,8 @@ function showFeatures(){
 }
 </script>
 
-    <script>
+<script>
+window.addEventListener("DOMContentLoaded", () => {
 
 const features = [];
 
@@ -463,7 +464,7 @@ for(let i=1;i<=25;i++){
         desc: "Feature " + i + " system description here.",
         img: "https://picsum.photos/500?random=" + i
     });
-}
+});
 
 const grid = document.getElementById("featuresGrid");
 
@@ -487,13 +488,14 @@ features.forEach(f => {
     grid.appendChild(div);
 });
 
-// popup kapatma (arka plana tıklayınca)
+// popup kapatma
 document.getElementById("featurePopup").onclick = function(e){
     if(e.target.id === "featurePopup"){
         this.style.display="none";
     }
 };
 
+});
 </script>
 
 <div id="featurePopup" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.8); z-index:99999; justify-content:center; align-items:center;">
