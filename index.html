@@ -471,47 +471,6 @@ function showFeatures(){
     
 <body>
 
-    <script>
-const features = [];
-
-for(let i=1;i<=25;i++){
-    features.push({
-        title: i % 2 === 0 ? "Tale Free Feature " + i : "Tale+ Feature " + i,
-        type: i % 3 === 0 ? "free" : "premium",
-        desc: "Feature " + i + " system description here.",
-        img: "https://picsum.photos/500?random=" + i
-    });
-}
-
-const grid = document.getElementById("featuresGrid");
-const popup = document.getElementById("featurePopup");
-
-features.forEach(f => {
-    const div = document.createElement("div");
-    div.className = "feature-card";
-
-    div.innerHTML = `
-        <h3 class="${f.type}">${f.title}</h3>
-        <p>Click for details</p>
-    `;
-
-    div.onclick = () => {
-        popup.style.display = "flex";
-        document.getElementById("pTitle").innerText = f.title;
-        document.getElementById("pDesc").innerText = f.desc;
-        document.getElementById("pImg").src = f.img;
-    };
-
-    grid.appendChild(div);
-});
-
-popup.onclick = (e) => {
-    if(e.target === popup){
-        popup.style.display = "none";
-    }
-};
-</script>
-
 
     <div class="topbar">
     <a href="#home">Home</a>
@@ -633,6 +592,47 @@ popup.onclick = (e) => {
     </div>
 
 </section>
+
+        <script>
+const features = [];
+
+for(let i=1;i<=25;i++){
+    features.push({
+        title: i % 2 === 0 ? "Tale Free Feature " + i : "Tale+ Feature " + i,
+        type: i % 3 === 0 ? "free" : "premium",
+        desc: "Feature " + i + " system description here.",
+        img: "https://picsum.photos/500?random=" + i
+    });
+}
+
+const grid = document.getElementById("featuresGrid");
+const popup = document.getElementById("featurePopup");
+
+features.forEach(f => {
+    const div = document.createElement("div");
+    div.className = "feature-card";
+
+    div.innerHTML = `
+        <h3 class="${f.type}">${f.title}</h3>
+        <p>Click for details</p>
+    `;
+
+    div.onclick = () => {
+        popup.style.display = "flex";
+        document.getElementById("pTitle").innerText = f.title;
+        document.getElementById("pDesc").innerText = f.desc;
+        document.getElementById("pImg").src = f.img;
+    };
+
+    grid.appendChild(div);
+});
+
+popup.onclick = (e) => {
+    if(e.target === popup){
+        popup.style.display = "none";
+    }
+};
+</script>
 
 
 
