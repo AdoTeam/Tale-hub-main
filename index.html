@@ -522,6 +522,7 @@ function showHome(){
     document.getElementById("about").style.display="block";
     document.getElementById("news").style.display="block";
     document.getElementById("products").style.display="block";
+    document.getElementById("script").style.display="block";
     document.getElementById("getkey").style.display="block";
     document.getElementById("thanks").style.display="block";
     document.getElementById("featuresPage").style.display="none";
@@ -536,6 +537,7 @@ function showFeatures(){
     document.getElementById("about").style.display="none";
     document.getElementById("news").style.display="none";
     document.getElementById("products").style.display="none";
+    document.getElementById("script").style.display="none";
     document.getElementById("getkey").style.display="none";
     document.getElementById("thanks").style.display="none";
 
@@ -566,6 +568,16 @@ function showFeatures(){
 <script>
 window.onload = function(){
     showHome();
+}
+</script>
+
+<script>
+function copyScript(){
+    const text = document.getElementById("scriptBox").value;
+
+    navigator.clipboard.writeText(text);
+
+    alert("Script Copied!");
 }
 </script>
     
@@ -696,6 +708,52 @@ Thank you for your support!
 
 </div>
 
+</section>
+
+<!-- Script kopyalama -->
+<section id="script" class="section">
+<div class="panel">
+
+<h2 style="margin-bottom:15px;">📜 Get Script</h2>
+
+<p style="color:#ccc;margin-bottom:20px;">
+Copy the latest Tale HUB loader and execute it in your executor.
+</p>
+
+<div style="
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:15px;
+background:rgba(15,23,42,1);
+padding:20px;
+border-radius:15px;
+border:1px solid rgba(255,255,255,.1);
+">
+
+<input
+id="scriptBox"
+value='loadstring(game:HttpGet("https://yourlink.com/script.lua"))()'
+readonly
+style="
+flex:1;
+background:#0f172a;
+color:white;
+border:none;
+padding:12px;
+border-radius:10px;
+outline:none;
+">
+
+<button
+class="tale-btn"
+onclick="copyScript()">
+Copy
+</button>
+
+</div>
+
+</div>
 </section>
 
 <!-- TALE+ FREE -->
