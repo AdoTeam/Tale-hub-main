@@ -366,40 +366,6 @@ html{
 </style>
 </head>
 
-<script>
-window.addEventListener("DOMContentLoaded", () => {
-
-const tale = document.getElementById("taleText");
-
-const fonts = [
-    "'Arial Black', sans-serif",
-    "'Impact', sans-serif",
-    "'Trebuchet MS', sans-serif",
-    "'Verdana', sans-serif",
-    "'Georgia', serif",
-    "'Courier New', monospace",
-    "'Tahoma', sans-serif",
-    "'Comic Sans MS', cursive"
-];
-
-let i = 0;
-
-setInterval(() => {
-    tale.classList.add("fontAnim");
-
-    setTimeout(() => {
-        tale.style.fontFamily = fonts[i];
-        i = (i + 1) % fonts.length;
-    }, 150);
-
-    setTimeout(() => {
-        tale.classList.remove("fontAnim");
-    }, 400);
-
-}, 1000);
-
-});
-</script>
     
 <body>
 
