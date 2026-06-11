@@ -112,7 +112,7 @@ nav ul li a{
 }
 
 .panel{
-    background:rgba(36, 37, 39, 0.53);
+    background:rgba(36, 37, 39, 0.32);
     backdrop-filter:blur(12px);
     border-radius:18px;
     padding:40px;
@@ -411,6 +411,80 @@ html{
     -webkit-text-fill-color:transparent;
 }
 
+.about-tale{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:50px;
+    margin-bottom:60px;
+}
+
+.about-left{
+    flex:1;
+    animation:slideLeft 1s ease;
+}
+
+.about-left h1{
+    font-size:55px;
+    margin-bottom:15px;
+}
+
+.about-left p{
+    color:#ccc;
+    line-height:30px;
+    font-size:18px;
+}
+
+.about-right{
+    flex:1;
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:15px;
+}
+
+.about-right img{
+    width:100%;
+    height:180px;
+    object-fit:cover;
+    border-radius:15px;
+    border:2px solid rgba(255,255,255,.2);
+    transition:.3s;
+}
+
+.about-right img:hover{
+    transform:scale(1.05);
+}
+
+.about-left h1{
+    font-size:55px;
+    font-weight:900;
+    background:linear-gradient(
+        90deg,
+        red,
+        orange,
+        yellow,
+        lime,
+        cyan,
+        blue,
+        violet
+    );
+    background-size:400%;
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    animation:rainbow 6s linear infinite;
+}
+
+@keyframes slideLeft{
+    from{
+        opacity:0;
+        transform:translateX(-100px);
+    }
+    to{
+        opacity:1;
+        transform:translateX(0);
+    }
+}
+
 
 </style>
 </head>
@@ -496,6 +570,44 @@ function showFeatures(){
     </div>
 </section>
 
+<section class="section">
+
+<div class="panel">
+
+<div class="about-tale">
+
+<div class="about-left">
+<h1>What is Tale HUB?</h1>
+
+<p>
+Tale HUB is a powerful Roblox script designed for players who want
+more control, more features, and a smoother experience.
+Built with a custom UI library and optimized for mobile devices,
+Tale HUB provides advanced systems, unique tools, and frequent updates.
+</p>
+
+<br>
+
+<p>
+Fast. Modern. Reliable.
+Join thousands of users and experience the next generation of Roblox scripting.
+</p>
+
+</div>
+
+<div class="about-right">
+<img src="https://picsum.photos/400?11">
+<img src="https://picsum.photos/400?12">
+<img src="https://picsum.photos/400?13">
+<img src="https://picsum.photos/400?14">
+</div>
+
+</div>
+
+</div>
+
+</section>
+
 <!-- TALE+ FREE -->
 <section id="getkey" class="section">
 <div class="panel">
@@ -551,19 +663,6 @@ function showFeatures(){
 </div>
 </section>
 
-<!-- INFO -->
-<section id="info" class="section">
-<div class="panel">
-
-<h2>What is Tale HUB</h2>
-    <p>----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</p>
-<p>Tale HUB is a Lua-based cheat for Roblox that stands out with its unique GUI library and features.
-    Special optimizations for mobile devices and fun cheats make it very powerful.
-    It was created by a team of three.</p>
-    <p>----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</p>
-
-</div>
-</section>
 
     <!-- FEATURES -->
 <section id="featuresPage" class="section" style="display:none;">
