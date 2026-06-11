@@ -359,110 +359,68 @@ html{
     left:50%;
     transform:translateX(-50%);
 
-    width:180px;
-    height:50px;
-
-    background:rgba(10,18,40,.75);
+    background:rgba(10,18,40,.8);
     backdrop-filter:blur(10px);
 
-    border:1px solid rgba(255,255,255,.4);
+    border:1px solid rgba(255,255,255,.3);
 
     border-radius:999px;
 
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
+    padding:10px 20px;
 
-    padding:0 15px;
+    display:flex;
+    gap:20px;
 
     z-index:99999;
 }
 
 .page-switch span{
-    color:white;
-    font-size:14px;
-    user-select:none;
-}
-
-.switch{
-    width:55px;
-    height:28px;
-
-    background:#1e293b;
-
-    border-radius:999px;
-
-    position:relative;
-
+    color:#888;
     cursor:pointer;
-}
-
-.switch-ball{
-    position:absolute;
-
-    width:22px;
-    height:22px;
-
-    top:3px;
-    left:3px;
-
-    background:white;
-
-    border-radius:50%;
-
     transition:.3s;
 }
 
-.switch.active .switch-ball{
-    left:30px;
+.page-switch .active{
+    color:white;
+    text-shadow:0 0 10px white;
 }
 
 
 </style>
 </head>
 
-    <div class="page-switch">
-
-    <span>Features</span>
-
-    <div class="switch" onclick="togglePage()" id="toggleBtn">
-        <div class="switch-ball"></div>
-    </div>
-
-    <span>Home</span>
-
+<div class="page-switch">
+    <span id="homeBtn" onclick="showHome()">Home</span>
+    <span id="featuresBtn" onclick="showFeatures()">Features</span>
 </div>
 
     <script>
 
 let homeMode = true;
 
-function togglePage(){
+function showHome(){
 
-    const btn = document.getElementById("toggleBtn");
+    document.getElementById("home").style.display="flex";
+    document.getElementById("products").style.display="block";
+    document.getElementById("info").style.display="block";
+    document.getElementById("getkey").style.display="block";
+    document.getElementById("thanks").style.display="block";
 
-    homeMode = !homeMode;
-
-    btn.classList.toggle("active");
-
-    if(homeMode){
-
-        document.getElementById("home").style.display="flex";
-        document.getElementById("products").style.display="block";
-        document.getElementById("info").style.display="block";
-        document.getElementById("getkey").style.display="block";
-
-    }else{
-
-        document.getElementById("home").style.display="none";
-        document.getElementById("products").style.display="none";
-        document.getElementById("info").style.display="none";
-        document.getElementById("getkey").style.display="none";
-
-    }
-
+    document.getElementById("homeBtn").classList.add("active");
+    document.getElementById("featuresBtn").classList.remove("active");
 }
 
+function showFeatures(){
+
+    document.getElementById("home").style.display="none";
+    document.getElementById("products").style.display="none";
+    document.getElementById("info").style.display="none";
+    document.getElementById("getkey").style.display="none";
+    document.getElementById("thanks").style.display="none";
+
+    document.getElementById("homeBtn").classList.remove("active");
+    document.getElementById("featuresBtn").classList.add("active");
+}
 </script>
     
 <body>
