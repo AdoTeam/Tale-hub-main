@@ -453,7 +453,7 @@ function showFeatures(){
 </script>
 
 <script>
-window.addEventListener("DOMContentLoaded", () => {
+window.addEventListener("load", () => {
 
 const features = [];
 
@@ -467,6 +467,12 @@ for(let i=1;i<=25;i++){
 });
 
 const grid = document.getElementById("featuresGrid");
+const popup = document.getElementById("featurePopup");
+
+if(!grid){
+    console.log("GRID YOK → HTML ID HATASI");
+    return;
+}
 
 features.forEach(f => {
 
@@ -479,19 +485,19 @@ features.forEach(f => {
     `;
 
     div.onclick = () => {
-        document.getElementById("featurePopup").style.display="flex";
-        document.getElementById("pTitle").innerText=f.title;
-        document.getElementById("pDesc").innerText=f.desc;
-        document.getElementById("pImg").src=f.img;
+        popup.style.display = "flex";
+        document.getElementById("pTitle").innerText = f.title;
+        document.getElementById("pDesc").innerText = f.desc;
+        document.getElementById("pImg").src = f.img;
     };
 
     grid.appendChild(div);
 });
 
-// popup kapatma
-document.getElementById("featurePopup").onclick = function(e){
-    if(e.target.id === "featurePopup"){
-        this.style.display="none";
+// popup close
+popup.onclick = (e) => {
+    if(e.target === popup){
+        popup.style.display = "none";
     }
 };
 
