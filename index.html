@@ -453,6 +453,7 @@ function showFeatures(){
 </script>
 
 <script>
+document.addEventListener("DOMContentLoaded", function () {
 
 const features = [];
 
@@ -467,11 +468,6 @@ for(let i=1;i<=25;i++){
 
 const grid = document.getElementById("featuresGrid");
 const popup = document.getElementById("featurePopup");
-
-if(!grid){
-    console.log("GRID YOK → HTML ID HATASI");
-    return;
-}
 
 features.forEach(f => {
 
@@ -493,7 +489,6 @@ features.forEach(f => {
     grid.appendChild(div);
 });
 
-// popup close
 popup.onclick = (e) => {
     if(e.target === popup){
         popup.style.display = "none";
@@ -538,7 +533,7 @@ popup.onclick = (e) => {
     <span id="taleText">Tale</span> HUB
 </h1>
 
-    <p class="subtitle">Modern • Fast </p>
+    <p class="subtitle">Modern • Fast • Powerful</p>
 
     <div style="margin-top:20px; display:flex; gap:10px;">
         <button class="btn discord" onclick="window.open('https://discord.com')">Discord</button>
