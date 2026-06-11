@@ -207,7 +207,7 @@ html{
     left:0;
     width:100%;
     height:60px;
-    background:white;
+    background:rgba(0, 0, 0, 0.692);
     display:flex;
     justify-content:center;
     align-items:center;
@@ -353,10 +353,49 @@ html{
     z-index:9999;
 }
 
+#taleText{
+    display:inline-block;
+    transition:all .4s ease;
+}
+
+.fontAnim{
+    transform:scale(1.08);
+}
+
 
 </style>
 </head>
 
+<script>
+const tale = document.getElementById("taleText");
+
+const fonts = [
+    "'Arial Black', sans-serif",
+    "'Impact', sans-serif",
+    "'Trebuchet MS', sans-serif",
+    "'Verdana', sans-serif",
+    "'Georgia', serif",
+    "'Courier New', monospace",
+    "'Tahoma', sans-serif",
+    "'Comic Sans MS', cursive"
+];
+
+let i = 0;
+
+setInterval(() => {
+    tale.classList.add("fontAnim");
+
+    setTimeout(() => {
+        tale.style.fontFamily = fonts[i];
+        i = (i + 1) % fonts.length;
+    }, 150);
+
+    setTimeout(() => {
+        tale.classList.remove("fontAnim");
+    }, 400);
+
+}, 1000);
+</script>
     
 <body>
 
@@ -371,7 +410,11 @@ html{
 
 <!-- HERO -->
 <section id="home" class="hero">
-    <h1 class="title">𝐓𝐚𝐥𝐞 𝐇𝐔𝐁</h1>
+
+<h1 class="title">
+    <span id="taleText">Tale</span> HUB
+</h1>
+
     <p class="subtitle">Modern • Fast • Powerful</p>
 
     <div style="margin-top:20px; display:flex; gap:10px;">
