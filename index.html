@@ -519,6 +519,8 @@ let homeMode = true;
 function showHome(){
 
     document.getElementById("home").style.display="flex";
+    document.getElementById("about").style.display="block";
+    document.getElementById("news").style.display="block";
     document.getElementById("products").style.display="block";
     document.getElementById("info").style.display="block";
     document.getElementById("getkey").style.display="block";
@@ -532,15 +534,16 @@ function showHome(){
 function showFeatures(){
 
     document.getElementById("home").style.display="none";
+    document.getElementById("about").style.display="none";
+    document.getElementById("news").style.display="none";
     document.getElementById("products").style.display="none";
-    document.getElementById("info").style.display="none";
     document.getElementById("getkey").style.display="none";
     document.getElementById("thanks").style.display="none";
+
     document.getElementById("featuresPage").style.display="block";
-    
+
     document.getElementById("homeBtn").classList.remove("active");
     document.getElementById("featuresBtn").classList.add("active");
-    
 }
 </script>
 
@@ -588,7 +591,8 @@ function showFeatures(){
     </div>
 </section>
 
-<section class="section">
+<!-- What is Tale HUB -->
+<section id="about" class="section">
 
 <div class="panel">
 
@@ -626,8 +630,8 @@ Join thousands of users and experience the next generation of Roblox scripting.
 
 </section>
 
-/* duyurular /*
-<section class="section">
+<!-- Duyurular -->
+<section id="news" class="section">
 
 <div class="panel">
 
