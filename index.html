@@ -593,17 +593,27 @@ function showFeatures(){
 
 </section>
 
-        <script>
-const features = [];
-
-for(let i=1;i<=25;i++){
-    features.push({
-        title: i % 2 === 0 ? "Tale Free Feature " + i : "Tale+ Feature " + i,
-        type: i % 3 === 0 ? "free" : "premium",
-        desc: "Feature " + i + " system description here.",
-        img: "https://picsum.photos/500?random=" + i
-    });
-}
+<script>
+const features = [
+  {
+    title: "Auto Farm",
+    type: "free",
+    desc: "Otomatik farm sistemi",
+    img: "https://picsum.photos/500?random=1"
+  },
+  {
+    title: "Aimbot Pro",
+    type: "premium",
+    desc: "Gelişmiş nişan sistemi",
+    img: "https://picsum.photos/500?random=2"
+  },
+  {
+    title: "Speed Hack",
+    type: "free",
+    desc: "Hız arttırma sistemi",
+    img: "https://picsum.photos/500?random=3"
+  }
+];
 
 const grid = document.getElementById("featuresGrid");
 const popup = document.getElementById("featurePopup");
