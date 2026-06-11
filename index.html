@@ -353,88 +353,10 @@ html{
     z-index:9999;
 }
 
-/* açılan kutu */
-.completed-actions{
-    width:260px;
-    height:300px;
-
-    background:rgba(15,23,42,.95);
-    border-radius:18px;
-
-    padding:15px;
-
-    border:1px solid rgba(255,255,255,.1);
-
-    overflow:hidden;
-
-    transition:0.3s;
-}
-
-.completed-actions h3{
-    text-align:center;
-    margin-bottom:10px;
-}
-
-.activity-list{
-    height:230px;
-    overflow-y:auto;
-}
-
-.activity-item{
-    background:rgba(255,255,255,.05);
-    padding:10px;
-    margin-bottom:8px;
-    border-radius:10px;
-}
-
-.activity-item p{
-    font-size:12px;
-    color:#ccc;
-}
-
-
 
 </style>
 </head>
 
-<script>
-const names = [
-"ShadowFox","NightPlayer","PixelStorm",
-"DarkWolf","GhostByte","FrostByte",
-"Nova","Zero","Blaze","Raven"
-];
-
-const products = [
-["Tale+ 1 Month","Monthly premium access","3.99"],
-["Tale+ 1 Year","Premium yearly subscription","12.99"],
-["Tale+ Infinite","Lifetime access package","29.99"]
-];
-
-setInterval(() => {
-
-    const p = products[Math.floor(Math.random()*products.length)];
-    const n = names[Math.floor(Math.random()*names.length)];
-
-    const item = document.createElement("div");
-    item.className = "activity-item";
-
-    item.innerHTML = `
-        <b>${p[0]}</b>
-        <p>${p[1]}</p>
-        <span>$${p[2]} • User: ${n}</span>
-    `;
-
-    document.querySelector(".activity-list")
-        .prepend(item);
-
-}, 5000);
-</script>
-
-    <script>
-function toggleWidget(){
-    document.getElementById("widget").classList.toggle("hide");
-}
-</script>
     
 <body>
 
@@ -538,47 +460,13 @@ function toggleWidget(){
         <p>Thanks For Using Tale HUB ❤️</p>
         <p>Thanks To Every Supporter 💚</p>
         <h1>SPECIAL THANKS</h1>
-        <p>LordOfTokyo</p>
-        <p>Alya</p>
-        <p>hzgurubu3</p>
-        <p>Lorder</p>
-        <p>Swashgden</p>
-        <p>Emre Yas</p>
+
     
     </div>
 
 </section>
 
-<div class="activity-widget" id="widget">
 
-    <div class="widget-toggle" onclick="toggleWidget()">
-        ☰
-    </div>
-
-    <div class="completed-actions">
-        <h3>Completed Actions</h3>
-
-        <div class="activity-list">
-
-            <div class="activity-item">
-                <b>Tale+ Infinite</b>
-                <p>$29.99 • ShadowFox</p>
-            </div>
-
-            <div class="activity-item">
-                <b>Tale+ 1 Year</b>
-                <p>$12.99 • NightPlayer</p>
-            </div>
-
-            <div class="activity-item">
-                <b>Tale+ 1 Month</b>
-                <p>$3.99 • Nova</p>
-            </div>
-
-        </div>
-    </div>
-
-</div>
 
 </body>
 </html>
