@@ -1,230 +1,1408 @@
-#include <jni.h>
-#include <pthread.h>
-#include <android/input.h>
-#include <cstdlib>
-#include <iostream>
-#include <string>
-#include <unordered_map>
-#include <unordered_set>
-#include <sstream>
-#include <iomanip>
-#include <cctype>
-#include <cstring>
-#include <array>
-#include <unistd.h>
-#include <sys/system_properties.h>
-#include <GLES3/gl3.h>
-#include <EGL/egl.h>
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Oyun Hilem | Profesyonel Tanıtım</title>
+  <!-- Anime.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    }
 
-#include "xdl.h"
-#include "dobby.h"
-#include "Include.h"
-#include "imgui.h"
-#include "imgui_internal.h"
-#include "imgui_impl_opengl3.h"
-#include "imgui_impl_android.h"
-#include "Roboto-Regular.h"
-#include "Icon.h"
-#include "Iconcpp.h"
+    body {
+      background: #0a0c10;
+      color: #e0e4f0;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
 
-bool setup;
-using namespace ImGui;
+    /* arkaplan efekt */
+    .bg-grid {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        linear-gradient(rgba(0, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 255, 0.03) 1px, transparent 1px);
+      background-size: 50px 50px;
+      z-index: -2;
+      pointer-events: none;
+    }
 
-static bool showkeymenu = true;
-static bool showmainmenu = false;
-static bool showplayer = false;
-static bool showexploits = false;
-static bool showmisc = false;
+    .glow {
+      position: fixed;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(0, 180, 255, 0.15) 0%, transparent 70%);
+      border-radius: 50%;
+      filter: blur(80px);
+      z-index: -1;
+      pointer-events: none;
+    }
 
-#define HOOKAF(ret, func, ...) \
-    ret (*orig##func)(__VA_ARGS__); \
-    ret my##func(__VA_ARGS__)
+    .glow-1 { top: -200px; left: -200px; }
+    .glow-2 { bottom: -200px; right: -200px; background: radial-gradient(circle, rgba(180, 0, 255, 0.15) 0%, transparent 70%); }
 
-HOOKAF(void, Input, void *thiz, void *ex_ab, void *ex_ac) {
-    origInput(thiz, ex_ab, ex_ac);
-    ImGui_ImplAndroid_HandleInputEvent((AInputEvent*)thiz);
-    return;
-}
+    /* container */
+    .container {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 0 30px;
+      position: relative;
+      z-index: 10;
+    }
 
-std::string GetProp(const char* key) {
-    char value[PROP_VALUE_MAX];
-    __system_property_get(key, value);
-    return std::string(value);
-}
+    /* header */
+    header {
+      padding: 30px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(0, 255, 255, 0.1);
+      position: relative;
+      z-index: 100;
+    }
 
-void SetupImgui() {
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO();
-    
-    int(*get_width)(void*);
-    int(*get_height)(void*);
-    get_width = (int (*)(void*)) Il2CppGetMethodOffset("UnityEngine.dll", "UnityEngine", "Screen", "get_width", 0);
-    get_height = (int (*)(void*)) Il2CppGetMethodOffset("UnityEngine.dll", "UnityEngine", "Screen", "get_height", 0);
-    
-    if (get_width && get_height) {
-        io.DisplaySize = ImVec2((float)get_width(nullptr), (float)get_height(nullptr));
-    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
 
-    ImGui::StyleColorsDark();
-    ImGuiStyle *style = &ImGui::GetStyle();
-    
-    style->Alpha = 1.0f;
-    style->WindowTitleAlign = ImVec2(0.5f, 0.5f);
-    style->FrameRounding = 12.0f; //buton koseleri icin
-    style->WindowRounding = 17.0f;//ana menu oval
-	style->Colors[ImGuiCol_TitleBg]          = ImColor(120, 20, 40, 255); // Pasifken
-    style->Colors[ImGuiCol_TitleBgActive]    = ImColor(170, 30, 60, 255); // Aktifken
-	style->Colors[ImGuiCol_Text]             = ImColor(255, 255, 255, 255); // Beyaz
-    ImGui_ImplOpenGL3_Init("#version 100");
-    
-    ImFontConfig font_cfg;
-    io.Fonts->AddFontFromMemoryTTF(&Roboto_Regular, sizeof(Roboto_Regular), 32.0f, &font_cfg, io.Fonts->GetGlyphRangesCyrillic());
-    ImGui::GetStyle().ScaleAllSizes(3.0f);
-}
+    .logo i {
+      color: #0ff;
+      text-shadow: 0 0 20px #0ff, 0 0 40px #0ff;
+      font-size: 32px;
+    }
 
-bool clearMousePos = true;
-struct UnityEngine_Vector2_Fields {
-    float x;
-    float y;
-};
+    .logo span {
+      background: linear-gradient(135deg, #fff, #0ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
 
-struct UnityEngine_Vector2_o {
-    UnityEngine_Vector2_Fields fields;
-};
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 40px;
+    }
 
-enum TouchPhase {
-    Began = 0,
-    Moved = 1,
-    Stationary = 2,
-    Ended = 3,
-    Canceled = 4
-};
+    nav a {
+      color: #b0b8d0;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 16px;
+      transition: 0.3s;
+      position: relative;
+      padding-bottom: 5px;
+    }
 
-struct UnityEngine_Touch_Fields {
-    int32_t m_FingerId;
-    struct UnityEngine_Vector2_o m_Position;
-    struct UnityEngine_Vector2_o m_RawPosition;
-    struct UnityEngine_Vector2_o m_PositionDelta;
-    float m_TimeDelta;
-    int32_t m_TapCount;
-    int32_t m_Phase;
-    int32_t m_Type;
-    float m_Pressure;
-    float m_maximumPossiblePressure;
-    float m_Radius;
-    float m_fRadiusVariance;
-    float m_AltitudeAngle;
-    float m_AzimuthAngle;
-};
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: #0ff;
+      transition: 0.3s;
+      box-shadow: 0 0 10px #0ff;
+    }
 
-void DrawMenu() {  
-    const ImVec2 window_size = ImVec2(700, 600);
-    ImGui::SetNextWindowSize(window_size, ImGuiCond_Once);
-    ImGui::Begin("⚙Metich Rays Key System", nullptr);
-         if(showkeymenu){
-		    ImGui::Text("Welcome To Metich Rays");
-		    ImGui::Separator(); 
-	        if (ImGui::Button("Start Cheat", ImVec2(120, 70)))
-				showmainmenu=true;
-				showkeymenu=false;
-				
-				}
-	
-	}
-    
-    ImGui::End();  
-}
+    nav a:hover::after {
+      width: 100%;
+    }
 
-EGLBoolean (*old_eglSwapBuffers)(EGLDisplay dpy, EGLSurface surface);
-EGLBoolean hook_eglSwapBuffers(EGLDisplay dpy, EGLSurface surface) {
-    static bool is_setup = false;
-    static bool should_clear_mouse_pos = false;
-    
-    if (!is_setup) {
-        SetupImgui();
-        is_setup = true;
-    }
-    
-    ImGuiIO &io = ImGui::GetIO();
-    int (*TouchCount)(void*) = (int (*)(void*)) Il2CppGetMethodOffset("UnityEngine.dll", "UnityEngine", "Input", "get_touchCount", 0);
-    
-    if (TouchCount) {
-        int touchCount = TouchCount(nullptr);
-        if (touchCount > 0) {
-            UnityEngine_Touch_Fields touch = ((UnityEngine_Touch_Fields (*)(int)) Il2CppGetMethodOffset("UnityEngine.dll", "UnityEngine", "Input", "GetTouch", 1))(0);
-            float reverseY = io.DisplaySize.y - touch.m_Position.fields.y;
+    nav a:hover {
+      color: #fff;
+      text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+    }
 
-            switch (touch.m_Phase) {
-                case TouchPhase::Began:
-                case TouchPhase::Stationary:
-                    io.MousePos = ImVec2(touch.m_Position.fields.x, reverseY);
-                    io.MouseDown[0] = true;
-                    break;
-                case TouchPhase::Ended:
-                case TouchPhase::Canceled:
-                    io.MouseDown[0] = false;
-                    should_clear_mouse_pos = true;
-                    break;
-                case TouchPhase::Moved:
-                    io.MousePos = ImVec2(touch.m_Position.fields.x, reverseY);
-                    break;
-                default:
-                    break;
-            }
-        } else {
-            io.MouseDown[0] = false;
-        }
-    }
+    .btn {
+      display: inline-block;
+      padding: 12px 32px;
+      border-radius: 40px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: 0.3s;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      letter-spacing: 1px;
+      position: relative;
+      overflow: hidden;
+    }
 
-    ImGui_ImplOpenGL3_NewFrame();
-    ImGui::NewFrame();
-    DrawMenu();
-    ImGui::Render();
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-    ImGui::EndFrame();
-    
-    if (should_clear_mouse_pos) {
-        io.MousePos = ImVec2(-1, -1);
-        should_clear_mouse_pos = false;
-    }
-    return old_eglSwapBuffers(dpy, surface);
-}
+    .btn-primary {
+      background: linear-gradient(135deg, #0ff, #0077ff);
+      color: #000;
+      box-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
+    }
 
-void *imgui_go(void*) {
-    void *handle_egl = xdl_open("libEGL.so", XDL_DEFAULT);
-    void *handle_input = xdl_open("libinput.so", XDL_DEFAULT);
-    
-    void *xdl_sym_egl = xdl_sym(handle_egl, "eglSwapBuffers", nullptr);
-    void *xdl_sym_input = xdl_sym(handle_input, "_ZN7android13InputConsumer21initializeMotionEventEPNS_11MotionEventEPKNS_12InputMessageE", nullptr);
-    
-    DobbyHook(xdl_sym_egl, (void*)hook_eglSwapBuffers, (void**)&old_eglSwapBuffers);
-    DobbyHook(xdl_sym_input, (void*)myInput, (void**)&origInput);
-    
-    pthread_exit(nullptr);
-}
+    .btn-primary:hover {
+      box-shadow: 0 0 40px rgba(0, 255, 255, 0.7);
+      transform: scale(1.05);
+    }
 
-void *hack_thread(void*) {
-    uintptr_t il2cppBase = 0;
-    do {
-        il2cppBase = findLibrary("libil2cpp.so");
-        sleep(1);
-    } while (il2cppBase == 0);
-    
-    Il2CppAttach("libil2cpp.so");
-    
-    pthread_exit(nullptr);
-}
+    .btn-outline {
+      background: transparent;
+      border: 2px solid #0ff;
+      color: #0ff;
+      box-shadow: 0 0 10px rgba(0, 255, 255, 0.2);
+    }
 
-__attribute__((constructor))
-void lib_main() {
-    pthread_t hacks;
-    pthread_create(&hacks, NULL, imgui_go, NULL);
-    pthread_create(&hacks, NULL, hack_thread, NULL);
-}
+    .btn-outline:hover {
+      background: rgba(0, 255, 255, 0.1);
+      box-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
+      transform: scale(1.05);
+    }
 
-extern "C" jint JNIEXPORT JNI_OnLoad(JavaVM *vm, void *key) {
-    JNIEnv *env;
-    vm->GetEnv((void**)&env, JNI_VERSION_1_6);
-    return JNI_VERSION_1_6;
-}
+    /* hero */
+    .hero {
+      padding: 100px 0 80px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 60px;
+    }
+
+    .hero-content {
+      flex: 1;
+      min-width: 300px;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(0, 255, 255, 0.1);
+      border: 1px solid rgba(0, 255, 255, 0.3);
+      padding: 8px 20px;
+      border-radius: 40px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #0ff;
+      margin-bottom: 20px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      backdrop-filter: blur(5px);
+    }
+
+    .hero h1 {
+      font-size: 64px;
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 20px;
+      letter-spacing: -1px;
+    }
+
+    .hero h1 .highlight {
+      background: linear-gradient(135deg, #0ff, #a0f, #ff0);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 30px rgba(0, 255, 255, 0.3));
+    }
+
+    .hero p {
+      font-size: 18px;
+      color: #a0a8c0;
+      margin-bottom: 40px;
+      max-width: 550px;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .hero-visual {
+      flex: 1;
+      min-width: 300px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    .hero-card {
+      width: 380px;
+      height: 380px;
+      background: rgba(20, 30, 50, 0.6);
+      border-radius: 40px;
+      border: 1px solid rgba(0, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), 0 0 50px rgba(0, 255, 255, 0.1);
+    }
+
+    .hero-card i {
+      font-size: 120px;
+      color: #0ff;
+      text-shadow: 0 0 50px #0ff, 0 0 100px #0ff;
+      margin-bottom: 20px;
+    }
+
+    .hero-card .badge {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: 4px;
+      color: #fff;
+      text-shadow: 0 0 20px #0ff;
+    }
+
+    .hero-card .sub {
+      color: #a0a8c0;
+      font-size: 14px;
+      margin-top: 10px;
+      letter-spacing: 2px;
+    }
+
+    /* stats */
+    .stats {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      gap: 30px;
+      padding: 60px 0;
+      border-top: 1px solid rgba(0, 255, 255, 0.1);
+      border-bottom: 1px solid rgba(0, 255, 255, 0.1);
+      margin: 40px 0;
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 48px;
+      font-weight: 900;
+      background: linear-gradient(135deg, #0ff, #0077ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+    }
+
+    .stat-label {
+      color: #8890a8;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-top: 8px;
+    }
+
+    /* features */
+    .section-title {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .section-title h2 {
+      font-size: 44px;
+      font-weight: 800;
+      margin-bottom: 16px;
+    }
+
+    .section-title h2 span {
+      background: linear-gradient(135deg, #0ff, #a0f);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .section-title p {
+      color: #8890a8;
+      font-size: 18px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+      padding: 40px 0 80px;
+    }
+
+    .feature-card {
+      background: rgba(20, 30, 50, 0.5);
+      border: 1px solid rgba(0, 255, 255, 0.1);
+      border-radius: 24px;
+      padding: 40px 30px;
+      transition: 0.4s;
+      backdrop-filter: blur(10px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 30% 20%, rgba(0, 255, 255, 0.05), transparent 70%);
+      opacity: 0;
+      transition: 0.4s;
+    }
+
+    .feature-card:hover {
+      border-color: rgba(0, 255, 255, 0.4);
+      transform: translateY(-10px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 40px rgba(0, 255, 255, 0.1);
+    }
+
+    .feature-card:hover::before {
+      opacity: 1;
+    }
+
+    .feature-icon {
+      width: 70px;
+      height: 70px;
+      background: rgba(0, 255, 255, 0.1);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+      font-size: 32px;
+      color: #0ff;
+      border: 1px solid rgba(0, 255, 255, 0.2);
+      transition: 0.3s;
+    }
+
+    .feature-card:hover .feature-icon {
+      background: rgba(0, 255, 255, 0.2);
+      box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
+      transform: scale(1.1);
+    }
+
+    .feature-card h3 {
+      font-size: 22px;
+      margin-bottom: 12px;
+      color: #fff;
+    }
+
+    .feature-card p {
+      color: #8890a8;
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    /* oyunlar */
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 25px;
+      padding: 40px 0 80px;
+    }
+
+    .game-item {
+      background: rgba(20, 30, 50, 0.5);
+      border: 1px solid rgba(0, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 30px 20px;
+      text-align: center;
+      transition: 0.3s;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+    }
+
+    .game-item:hover {
+      border-color: #0ff;
+      transform: scale(1.05);
+      box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
+    }
+
+    .game-item i {
+      font-size: 48px;
+      color: #0ff;
+      margin-bottom: 16px;
+      filter: drop-shadow(0 0 15px rgba(0, 255, 255, 0.5));
+    }
+
+    .game-item h4 {
+      font-size: 18px;
+      margin-bottom: 6px;
+    }
+
+    .game-item span {
+      font-size: 13px;
+      color: #8890a8;
+    }
+
+    /* fiyatlandırma */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+      padding: 40px 0 80px;
+    }
+
+    .price-card {
+      background: rgba(20, 30, 50, 0.5);
+      border: 1px solid rgba(0, 255, 255, 0.1);
+      border-radius: 30px;
+      padding: 40px 30px;
+      text-align: center;
+      transition: 0.4s;
+      backdrop-filter: blur(10px);
+      position: relative;
+    }
+
+    .price-card.popular {
+      border-color: #0ff;
+      box-shadow: 0 0 50px rgba(0, 255, 255, 0.15);
+      transform: scale(1.02);
+    }
+
+    .price-card.popular::before {
+      content: 'EN POPÜLER';
+      position: absolute;
+      top: -14px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(135deg, #0ff, #0077ff);
+      color: #000;
+      padding: 6px 24px;
+      border-radius: 40px;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      box-shadow: 0 0 30px rgba(0, 255, 255, 0.4);
+    }
+
+    .price-card:hover {
+      transform: translateY(-10px);
+      border-color: #0ff;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 40px rgba(0, 255, 255, 0.15);
+    }
+
+    .price-card h3 {
+      font-size: 22px;
+      margin-bottom: 16px;
+      color: #b0b8d0;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .price {
+      font-size: 56px;
+      font-weight: 900;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, #fff, #0ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+    }
+
+    .price span {
+      font-size: 18px;
+      font-weight: 400;
+      color: #8890a8;
+      -webkit-text-fill-color: #8890a8;
+    }
+
+    .price-desc {
+      color: #8890a8;
+      font-size: 14px;
+      margin-bottom: 30px;
+    }
+
+    .price-features {
+      list-style: none;
+      text-align: left;
+      margin-bottom: 30px;
+    }
+
+    .price-features li {
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      color: #b0b8d0;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .price-features li i {
+      color: #0ff;
+      font-size: 14px;
+    }
+
+    .price-features li.disabled {
+      color: #555c70;
+      text-decoration: line-through;
+    }
+
+    .price-features li.disabled i {
+      color: #555c70;
+    }
+
+    /* yorumlar */
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      padding: 40px 0 80px;
+    }
+
+    .testimonial-card {
+      background: rgba(20, 30, 50, 0.5);
+      border: 1px solid rgba(0, 255, 255, 0.1);
+      border-radius: 24px;
+      padding: 30px;
+      backdrop-filter: blur(10px);
+      transition: 0.3s;
+    }
+
+    .testimonial-card:hover {
+      border-color: rgba(0, 255, 255, 0.3);
+      transform: translateY(-5px);
+    }
+
+    .testimonial-card .stars {
+      color: #ffd700;
+      font-size: 18px;
+      margin-bottom: 16px;
+      text-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+    }
+
+    .testimonial-card p {
+      color: #b0b8d0;
+      font-size: 15px;
+      font-style: italic;
+      margin-bottom: 20px;
+      line-height: 1.7;
+    }
+
+    .testimonial-user {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .testimonial-user .avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #0ff, #a0f);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 20px;
+      color: #000;
+    }
+
+    .testimonial-user .info h4 {
+      font-size: 16px;
+      color: #fff;
+    }
+
+    .testimonial-user .info span {
+      font-size: 13px;
+      color: #8890a8;
+    }
+
+    /* CTA */
+    .cta-section {
+      padding: 80px 0;
+      text-align: center;
+      background: radial-gradient(ellipse at center, rgba(0, 255, 255, 0.05) 0%, transparent 70%);
+      border-radius: 60px;
+      margin: 40px 0;
+      border: 1px solid rgba(0, 255, 255, 0.1);
+    }
+
+    .cta-section h2 {
+      font-size: 48px;
+      font-weight: 900;
+      margin-bottom: 16px;
+    }
+
+    .cta-section h2 span {
+      background: linear-gradient(135deg, #0ff, #a0f);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .cta-section p {
+      color: #8890a8;
+      font-size: 18px;
+      margin-bottom: 40px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* footer */
+    footer {
+      border-top: 1px solid rgba(0, 255, 255, 0.1);
+      padding: 60px 0 30px;
+      margin-top: 40px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+
+    .footer-brand .logo {
+      margin-bottom: 16px;
+      font-size: 24px;
+    }
+
+    .footer-brand p {
+      color: #8890a8;
+      font-size: 14px;
+      line-height: 1.8;
+      max-width: 300px;
+    }
+
+    .footer-col h4 {
+      color: #fff;
+      font-size: 16px;
+      margin-bottom: 20px;
+      letter-spacing: 1px;
+    }
+
+    .footer-col ul {
+      list-style: none;
+    }
+
+    .footer-col ul li {
+      margin-bottom: 12px;
+    }
+
+    .footer-col ul li a {
+      color: #8890a8;
+      text-decoration: none;
+      font-size: 14px;
+      transition: 0.3s;
+    }
+
+    .footer-col ul li a:hover {
+      color: #0ff;
+      padding-left: 5px;
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      padding-top: 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .footer-bottom p {
+      color: #555c70;
+      font-size: 13px;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 16px;
+    }
+
+    .social-links a {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.05);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #8890a8;
+      text-decoration: none;
+      transition: 0.3s;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .social-links a:hover {
+      background: rgba(0, 255, 255, 0.1);
+      color: #0ff;
+      border-color: #0ff;
+      box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+      transform: translateY(-3px);
+    }
+
+    /* responsive */
+    @media (max-width: 1024px) {
+      .hero h1 { font-size: 48px; }
+      .hero-card { width: 320px; height: 320px; }
+      .hero-card i { font-size: 90px; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 768px) {
+      header { flex-direction: column; gap: 20px; }
+      nav ul { gap: 20px; flex-wrap: wrap; justify-content: center; }
+      .hero { padding: 60px 0; text-align: center; }
+      .hero p { margin-left: auto; margin-right: auto; }
+      .hero-buttons { justify-content: center; }
+      .hero h1 { font-size: 36px; }
+      .hero-card { width: 280px; height: 280px; }
+      .hero-card i { font-size: 70px; }
+      .section-title h2 { font-size: 32px; }
+      .cta-section h2 { font-size: 32px; }
+      .stats { flex-direction: column; gap: 20px; }
+      .footer-grid { grid-template-columns: 1fr; text-align: center; }
+      .footer-brand p { margin: 0 auto; }
+      .footer-bottom { flex-direction: column; text-align: center; }
+    }
+
+    @media (max-width: 480px) {
+      .container { padding: 0 16px; }
+      .hero h1 { font-size: 28px; }
+      .price { font-size: 40px; }
+      .hero-card { width: 240px; height: 240px; }
+      .hero-card i { font-size: 56px; }
+    }
+
+    /* animasyon başlangıç durumları */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+
+    .reveal-left {
+      opacity: 0;
+      transform: translateX(-50px);
+    }
+
+    .reveal-right {
+      opacity: 0;
+      transform: translateX(50px);
+    }
+
+    .reveal-scale {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+  </style>
+</head>
+<body>
+  <!-- arkaplan -->
+  <div class="bg-grid"></div>
+  <div class="glow glow-1"></div>
+  <div class="glow glow-2"></div>
+
+  <!-- header -->
+  <header class="container">
+    <div class="logo">
+      <i class="fas fa-gamepad"></i>
+      <span>Hilem</span>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="#features">Özellikler</a></li>
+        <li><a href="#games">Oyunlar</a></li>
+        <li><a href="#pricing">Fiyatlar</a></li>
+        <li><a href="#testimonials">Yorumlar</a></li>
+      </ul>
+    </nav>
+    <a href="#pricing" class="btn btn-primary" style="padding: 10px 28px; font-size: 14px;">
+      <i class="fas fa-bolt" style="margin-right: 8px;"></i>Hemen Al
+    </a>
+  </header>
+
+  <!-- hero -->
+  <section class="hero container">
+    <div class="hero-content reveal-left">
+      <div class="hero-badge">
+        <i class="fas fa-shield-alt" style="margin-right: 8px;"></i>VAC & Anti-Cheat Korumalı
+      </div>
+      <h1>
+        Oyunlarda <span class="highlight">Sınırları</span> Aş
+      </h1>
+      <p>
+        En gelişmiş oyun hilem yazılımı ile rakiplerinizi geride bırakın. 
+        Aimbot, ESP, Wallhack ve daha fazlası. Tespit edilemez, sürekli güncel, 
+        profesyonel destek.
+      </p>
+      <div class="hero-buttons">
+        <a href="#pricing" class="btn btn-primary">
+          <i class="fas fa-rocket" style="margin-right: 8px;"></i>Satın Al
+        </a>
+        <a href="#features" class="btn btn-outline">
+          <i class="fas fa-info-circle" style="margin-right: 8px;"></i>Keşfet
+        </a>
+      </div>
+    </div>
+    <div class="hero-visual reveal-right">
+      <div class="hero-card">
+        <i class="fas fa-crosshairs"></i>
+        <div class="badge">AIMBOT</div>
+        <div class="sub">PRO EDITION</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- stats -->
+  <div class="container">
+    <div class="stats">
+      <div class="stat-item reveal">
+        <div class="stat-number">50K+</div>
+        <div class="stat-label">Aktif Kullanıcı</div>
+      </div>
+      <div class="stat-item reveal">
+        <div class="stat-number">99.9%</div>
+        <div class="stat-label">Tespit Edilemez</div>
+      </div>
+      <div class="stat-item reveal">
+        <div class="stat-number">24/7</div>
+        <div class="stat-label">Canlı Destek</div>
+      </div>
+      <div class="stat-item reveal">
+        <div class="stat-number">4.9</div>
+        <div class="stat-label">Kullanıcı Puanı</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- features -->
+  <section id="features" class="container">
+    <div class="section-title reveal">
+      <h2>Neden <span>Hilem</span>?</h2>
+      <p>En son teknoloji ile geliştirilmiş, oyun deneyiminizi zirveye taşıyacak özellikler.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card reveal">
+        <div class="feature-icon">
+          <i class="fas fa-crosshairs"></i>
+        </div>
+        <h3>Gelişmiş Aimbot</h3>
+        <p>Yapay zeka destekli nişan alma sistemi ile her atışınız isabetli. Ayarlanabilir hız, mesafe ve kemik seçimi.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">
+          <i class="fas fa-eye"></i>
+        </div>
+        <h3>ESP & Wallhack</h3>
+        <p>Düşmanlarınızı duvarların arkasından görün. Kutular, iskeletler, mesafe ve isim göstergeleri ile tam kontrol.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">
+          <i class="fas fa-shield-alt"></i>
+        </div>
+        <h3>Anti-Cheat Koruması</h3>
+        <p>VAC, EAC, BE ve diğer tüm anti-cheat sistemlerine karşı %100 tespit edilemez. Sürekli güncellenen koruma.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">
+          <i class="fas fa-bolt"></i>
+        </div>
+        <h3>Düşük Gecikme</h3>
+        <p>Optimize edilmiş kod yapısı ile sıfır gecikme. Oyun performansınızı etkilemez, FPS düşüşü yaşatmaz.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">
+          <i class="fas fa-sync-alt"></i>
+        </div>
+        <h3>Otomatik Güncelleme</h3>
+        <p>Oyun güncellemelerine anında uyum sağlar. Arka planda otomatik güncellenir, siz fark etmezsiniz.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">
+          <i class="fas fa-headset"></i>
+        </div>
+        <h3>7/24 Destek</h3>
+        <p>Uzman ekibimiz her zaman yanınızda. Discord ve canlı destek ile anında yardım alın.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- games -->
+  <section id="games" class="container">
+    <div class="section-title reveal">
+      <h2>Desteklenen <span>Oyunlar</span></h2>
+      <p>En popüler rekabetçi oyunlarda kesintisiz hile deneyimi.</p>
+    </div>
+    <div class="games-grid">
+      <div class="game-item reveal">
+        <i class="fas fa-skull"></i>
+        <h4>CS2</h4>
+        <span>Counter-Strike 2</span>
+      </div>
+      <div class="game-item reveal">
+        <i class="fas fa-gun"></i>
+        <h4>Valorant</h4>
+        <span>Riot Games</span>
+      </div>
+      <div class="game-item reveal">
+        <i class="fas fa-parachute-box"></i>
+        <h4>PUBG</h4>
+        <span>Battle Royale</span>
+      </div>
+      <div class="game-item reveal">
+        <i class="fas fa-fire"></i>
+        <h4>Warzone</h4>
+        <span>Call of Duty</span>
+      </div>
+      <div class="game-item reveal">
+        <i class="fas fa-dragon"></i>
+        <h4>Apex Legends</h4>
+        <span>Respawn</span>
+      </div>
+      <div class="game-item reveal">
+        <i class="fas fa-fort-awesome"></i>
+        <h4>Fortnite</h4>
+        <span>Epic Games</span>
+      </div>
+      <div class="game-item reveal">
+        <i class="fas fa-ghost"></i>
+        <h4>Rust</h4>
+        <span>Facepunch</span>
+      </div>
+      <div class="game-item reveal">
+        <i class="fas fa-cross"></i>
+        <h4>Escape from Tarkov</h4>
+        <span>Battlestate</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- pricing -->
+  <section id="pricing" class="container">
+    <div class="section-title reveal">
+      <h2>Fiyat <span>Planları</span></h2>
+      <p>Bütçenize uygun, esnek abonelik seçenekleri. İstediğiniz zaman iptal edin.</p>
+    </div>
+    <div class="pricing-grid">
+      <div class="price-card reveal">
+        <h3>Başlangıç</h3>
+        <div class="price">₺99<span>/ay</span></div>
+        <div class="price-desc">Temel özelliklerle başlayın</div>
+        <ul class="price-features">
+          <li><i class="fas fa-check"></i> Aimbot (Temel)</li>
+          <li><i class="fas fa-check"></i> ESP (Kutu)</li>
+          <li><i class="fas fa-check"></i> 1 Oyun Desteği</li>
+          <li><i class="fas fa-check"></i> Standart Destek</li>
+          <li class="disabled"><i class="fas fa-times"></i> Wallhack</li>
+          <li class="disabled"><i class="fas fa-times"></i> Öncelikli Destek</li>
+        </ul>
+        <a href="#" class="btn btn-outline" style="width: 100%;">Satın Al</a>
+      </div>
+      <div class="price-card popular reveal-scale">
+        <h3>Profesyonel</h3>
+        <div class="price">₺249<span>/ay</span></div>
+        <div class="price-desc">En çok tercih edilen paket</div>
+        <ul class="price-features">
+          <li><i class="fas fa-check"></i> Aimbot (Gelişmiş)</li>
+          <li><i class="fas fa-check"></i> ESP (İskelet + Kutu)</li>
+          <li><i class="fas fa-check"></i> Wallhack</li>
+          <li><i class="fas fa-check"></i> 3 Oyun Desteği</li>
+          <li><i class="fas fa-check"></i> Öncelikli Destek</li>
+          <li><i class="fas fa-check"></i> Otomatik Güncelleme</li>
+        </ul>
+        <a href="#" class="btn btn-primary" style="width: 100%;">Satın Al</a>
+      </div>
+      <div class="price-card reveal">
+        <h3>Elite</h3>
+        <div class="price">₺499<span>/ay</span></div>
+        <div class="price-desc">Sınırsız güç, tam paket</div>
+        <ul class="price-features">
+          <li><i class="fas fa-check"></i> Tüm Aimbot Özellikleri</li>
+          <li><i class="fas fa-check"></i> Tüm ESP Özellikleri</li>
+          <li><i class="fas fa-check"></i> Sınırsız Oyun Desteği</li>
+          <li><i class="fas fa-check"></i> 7/24 VIP Destek</li>
+          <li><i class="fas fa-check"></i> Özel Yapılandırma</li>
+          <li><i class="fas fa-check"></i> Erken Erişim</li>
+        </ul>
+        <a href="#" class="btn btn-outline" style="width: 100%;">Satın Al</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- testimonials -->
+  <section id="testimonials" class="container">
+    <div class="section-title reveal">
+      <h2>Kullanıcı <span>Yorumları</span></h2>
+      <p>Binlerce memnun kullanıcı, sizin gibi oyuncular.</p>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testimonial-card reveal">
+        <div class="stars">
+          <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+        </div>
+        <p>"Yaklaşık 6 aydır kullanıyorum. Ne bir ban ne bir sorun. CS2'de Global Elite oldum sayelerinde. Kesinlikle tavsiye ederim!"</p>
+        <div class="testimonial-user">
+          <div class="avatar">MK</div>
+          <div class="info">
+            <h4>Murat K.</h4>
+            <span>CS2 Oyuncusu</span>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card reveal">
+        <div class="stars">
+          <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+        </div>
+        <p>"Valorant'ta Immortal'a çıktım. Aimbot ayarları çok detaylı, istediğiniz gibi özelleştirebiliyorsunuz. Destek ekibi de çok hızlı."</p>
+        <div class="testimonial-user">
+          <div class="avatar">AY</div>
+          <div class="info">
+            <h4>Ayşe Y.</h4>
+            <span>Valorant Oyuncusu</span>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card reveal">
+        <div class="stars">
+          <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+        </div>
+        <p>"PUBG'de uzun süredir hile arıyordum, en sonunda bunu buldum. FPS düşüşü yok, güncellemeler otomatik. Tek eksik mobil desteği olmaması."</p>
+        <div class="testimonial-user">
+          <div class="avatar">CD</div>
+          <div class="info">
+            <h4>Can D.</h4>
+            <span>PUBG Oyuncusu</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <div class="container">
+    <div class="cta-section reveal">
+      <h2>Hemen <span>Başla</span></h2>
+      <p>Oyun dünyasında fark yaratmaya hazır mısın? Binlerce oyuncuya katıl, avantajları keşfet.</p>
+      <a href="#pricing" class="btn btn-primary" style="padding: 18px 50px; font-size: 18px;">
+        <i class="fas fa-shopping-cart" style="margin-right: 10px;"></i>Paketleri Gör
+      </a>
+    </div>
+  </div>
+
+  <!-- footer -->
+  <footer class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">
+          <i class="fas fa-gamepad"></i>
+          <span>Hilem</span>
+        </div>
+        <p>Profesyonel oyun hilem yazılımı. 2020'den beri binlerce oyuncuya kesintisiz hizmet. Tespit edilemez, güvenli ve güncel.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Ürün</h4>
+        <ul>
+          <li><a href="#features">Özellikler</a></li>
+          <li><a href="#pricing">Fiyatlar</a></li>
+          <li><a href="#games">Oyunlar</a></li>
+          <li><a href="#">Güncellemeler</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Destek</h4>
+        <ul>
+          <li><a href="#">SSS</a></li>
+          <li><a href="#">İletişim</a></li>
+          <li><a href="#">Discord</a></li>
+          <li><a href="#">Kurulum Rehberi</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Yasal</h4>
+        <ul>
+          <li><a href="#">Kullanım Şartları</a></li>
+          <li><a href="#">Gizlilik Politikası</a></li>
+          <li><a href="#">İade Politikası</a></li>
+          <li><a href="#">Çerez Politikası</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Hilem. Tüm hakları saklıdır. Bu site tanıtım amaçlıdır.</p>
+      <div class="social-links">
+        <a href="#"><i class="fab fa-discord"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="#"><i class="fab fa-youtube"></i></a>
+        <a href="#"><i class="fab fa-telegram"></i></a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Anime.js animasyonları -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Hero animasyonları
+      anime({
+        targets: '.hero-content .hero-badge',
+        opacity: [0, 1],
+        translateY: [20, 0],
+        duration: 800,
+        easing: 'easeOutExpo',
+        delay: 200
+      });
+
+      anime({
+        targets: '.hero-content h1',
+        opacity: [0, 1],
+        translateY: [30, 0],
+        duration: 1000,
+        easing: 'easeOutExpo',
+        delay: 400
+      });
+
+      anime({
+        targets: '.hero-content p',
+        opacity: [0, 1],
+        translateY: [20, 0],
+        duration: 800,
+        easing: 'easeOutExpo',
+        delay: 600
+      });
+
+      anime({
+        targets: '.hero-buttons .btn',
+        opacity: [0, 1],
+        translateY: [20, 0],
+        duration: 800,
+        easing: 'easeOutExpo',
+        delay: anime.stagger(150, {start: 800})
+      });
+
+      // Hero kart animasyonu
+      anime({
+        targets: '.hero-card',
+        opacity: [0, 1],
+        scale: [0.8, 1],
+        rotate: [5, 0],
+        duration: 1200,
+        easing: 'easeOutElastic(1, .5)',
+        delay: 400
+      });
+
+      anime({
+        targets: '.hero-card i',
+        rotate: [0, 10, -10, 0],
+        duration: 2000,
+        loop: true,
+        easing: 'easeInOutSine',
+        delay: 1600
+      });
+
+      // Scroll reveal animasyonları
+      const revealElements = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale');
+      
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const el = entry.target;
+            
+            if (el.classList.contains('reveal')) {
+              anime({
+                targets: el,
+                opacity: [0, 1],
+                translateY: [30, 0],
+                duration: 800,
+                easing: 'easeOutExpo'
+              });
+            } else if (el.classList.contains('reveal-left')) {
+              anime({
+                targets: el,
+                opacity: [0, 1],
+                translateX: [-50, 0],
+                duration: 900,
+                easing: 'easeOutExpo'
+              });
+            } else if (el.classList.contains('reveal-right')) {
+              anime({
+                targets: el,
+                opacity: [0, 1],
+                translateX: [50, 0],
+                duration: 900,
+                easing: 'easeOutExpo'
+              });
+            } else if (el.classList.contains('reveal-scale')) {
+              anime({
+                targets: el,
+                opacity: [0, 1],
+                scale: [0.9, 1],
+                duration: 800,
+                easing: 'easeOutExpo'
+              });
+            }
+            
+            observer.unobserve(el);
+          }
+        });
+      }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+      });
+
+      revealElements.forEach(el => observer.observe(el));
+
+      // Stat sayı animasyonu
+      const statNumbers = document.querySelectorAll('.stat-number');
+      
+      const statObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const el = entry.target;
+            const text = el.textContent;
+            
+            if (text.includes('K+')) {
+              const num = parseInt(text);
+              anime({
+                targets: el,
+                innerHTML: [0, num],
+                round: 1,
+                duration: 2000,
+                easing: 'easeOutExpo',
+                update: function(anim) {
+                  el.innerHTML = Math.round(anim.animations[0].currentValue) + 'K+';
+                }
+              });
+            } else if (text.includes('%')) {
+              const num = parseFloat(text);
+              anime({
+                targets: el,
+                innerHTML: [0, num],
+                round: 1,
+                duration: 2000,
+                easing: 'easeOutExpo',
+                update: function(anim) {
+                  el.innerHTML = anim.animations[0].currentValue.toFixed(1) + '%';
+                }
+              });
+            } else if (text === '4.9') {
+              anime({
+                targets: el,
+                innerHTML: [0, 4.9],
+                round: 10,
+                duration: 2000,
+                easing: 'easeOutExpo',
+                update: function(anim) {
+                  el.innerHTML = anim.animations[0].currentValue.toFixed(1);
+                }
+              });
+            } else if (text === '24/7') {
+              // özel durum, animasyon yok
+            } else {
+              const num = parseInt(text);
+              anime({
+                targets: el,
+                innerHTML: [0, num],
+                round: 1,
+                duration: 2000,
+                easing: 'easeOutExpo'
+              });
+            }
+            
+            statObserver.unobserve(el);
+          }
+        });
+      }, { threshold: 0.5 });
+
+      statNumbers.forEach(el => statObserver.observe(el));
+
+      // Feature kartları için hover animasyonu (anime.js ile ekstra)
+      document.querySelectorAll('.feature-card').forEach(card => {
+        card.addEventListener('mouseenter', () => {
+          anime({
+            targets: card.querySelector('.feature-icon'),
+            scale: [1, 1.15],
+            duration: 300,
+            easing: 'easeOutExpo'
+          });
+        });
+        card.addEventListener('mouseleave', () => {
+          anime({
+            targets: card.querySelector('.feature-icon'),
+            scale: [1.15, 1],
+            duration: 300,
+            easing: 'easeOutExpo'
+          });
+        });
+      });
+
+      // Game item hover animasyonu
+      document.querySelectorAll('.game-item').forEach(item => {
+        item.addEventListener('mouseenter', () => {
+          anime({
+            targets: item.querySelector('i'),
+            scale: [1, 1.2],
+            rotate: [0, 5, -5, 0],
+            duration: 500,
+            easing: 'easeOutExpo'
+          });
+        });
+      });
+
+      // Logo animasyonu (sürekli)
+      anime({
+        targets: '.logo i',
+        rotate: [0, 10, -10, 0],
+        duration: 4000,
+        loop: true,
+        easing: 'easeInOutSine'
+      });
+
+      // Glow arkaplan animasyonu
+      anime({
+        targets: '.glow-1',
+        translateX: [0, 30, -30, 0],
+        translateY: [0, -20, 20, 0],
+        duration: 15000,
+        loop: true,
+        easing: 'easeInOutSine'
+      });
+
+      anime({
+        targets: '.glow-2',
+        translateX: [0, -30, 30, 0],
+        translateY: [0, 20, -20, 0],
+        duration: 18000,
+        loop: true,
+        easing: 'easeInOutSine'
+      });
+
+      // Section başlıkları için ekstra parlama
+      document.querySelectorAll('.section-title h2 span').forEach(span => {
+        anime({
+          targets: span,
+          textShadow: [
+            '0 0 20px rgba(0,255,255,0.3)',
+            '0 0 40px rgba(0,255,255,0.6)',
+            '0 0 20px rgba(0,255,255,0.3)'
+          ],
+          duration: 3000,
+          loop: true,
+          easing: 'easeInOutSine'
+        });
+      });
+    });
+  </script>
+</body>
+	</html>
